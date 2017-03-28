@@ -57,7 +57,7 @@ u32 mcuID[3];
 mcuID[0] = *(__IO u32*)(0x1FFF7A10);
     mcuID[1] = *(__IO u32*)(0x1FFF7A14);
     mcuID[2] = *(__IO u32*)(0x1FFF7A18);
-printf (" %X %X %X \n",mcuID[0],mcuID[1] ,mcuID[2] );
+//printf (" %X %X %X \n",mcuID[0],mcuID[1] ,mcuID[2] );
 
 STM32F1:
 SerialID[0] = *(unsigned int*)(0x1FFFF7E8);
@@ -67,7 +67,7 @@ SerialID[0] = *(unsigned int*)(0x1FFFF7E8);
 */
   
 
-#define  FLASH_START_ADDR 0x803f000
+#define  FLASH_START_ADDR 0x801f000
 
 FLASH_FLAG FLASH_STATUS;
 
@@ -120,7 +120,7 @@ unsigned char FLASH_READ(unsigned short int * memory_data,unsigned short int n)
 	while(count < n)
 	{
 	  *(memory_data+count) = *(u16 *)(FLASH_START_ADDR + count*2);
-		printf("\r %d \r",*(memory_data+count));   //¶ÁÈ¡
+//		printf("\r %d \r",*(memory_data+count));   //¶ÁÈ¡
 		count++;
 		if(count > n)
 		{
@@ -148,7 +148,7 @@ void this_is_a_secret(void)
 					while(1)
 					{
 						Delay_ms(1000);
-							printf("\r\n joke \r\n");  
+//							printf("\r\n joke \r\n");  
 					
 					
 					}

@@ -10,4 +10,8 @@
 void TIM5_NVIC_Configuration(void);
 void TIM5_Configuration(void);
 
+void TIM4_NVIC_Configuration(void);
+void TIM4_Configuration(void);
+
+
 #endif	/* TIME_TEST_H */

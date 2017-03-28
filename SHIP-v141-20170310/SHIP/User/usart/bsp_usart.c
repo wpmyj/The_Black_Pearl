@@ -45,6 +45,7 @@ extern u8 flag_4ms_set;
  * @param  无
  * @retval 无
  */
+
 void USART1_Config(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -66,16 +67,33 @@ void USART1_Config(void)
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* USART1 mode config */
-    USART_InitStructure.USART_BaudRate = 115200;
+    USART_InitStructure.USART_BaudRate = 9600;
     USART_InitStructure.USART_WordLength = USART_WordLength_8b;
     USART_InitStructure.USART_StopBits = USART_StopBits_1;
     USART_InitStructure.USART_Parity = USART_Parity_No ;
     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
     USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
     USART_Init(USART1, &USART_InitStructure);
+		
+		USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
     USART_Cmd(USART1, ENABLE);
 }
+
+void  USART1_NVIC_Configuration(void)
+{
+	NVIC_InitTypeDef NVIC_InitStructure; 
+	/* Configure the NVIC Preemption Priority Bits */  
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+	
+	/* Enable the USARTy Interrupt */
+	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;	 
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+}
+
 
 
 ///重定向c库函数printf到USART1
@@ -676,9 +694,6 @@ void USART3_printf(USART_TypeDef* USARTx, uint8_t *Data,...)
 
 
 
-
-
-
 	
 void USART4_Config(void)
 {
@@ -732,8 +747,11 @@ static void  USART4_NVIC_Configuration(void)
 
 void GY_26_Receive_Init(void)
 {
-	USART4_Config();
-	USART4_NVIC_Configuration();
+	  USART1_Config(); //使用uart1，代替串口4，进行compass测试
+		USART1_NVIC_Configuration();
+	
+	//USART4_Config();
+	//USART4_NVIC_Configuration();
 
 }
 
@@ -827,8 +845,8 @@ int GY_26_Get_Angle(void)
 					Angle = (angle_receive_buf[0]-0x30) * 100 + (angle_receive_buf[1] - 0x30) * 10 + (angle_receive_buf[2] - 0x30); 
 	
 
-			USART_SendData(UART4,0x31);
-		while (USART_GetFlagStatus(UART4, USART_FLAG_TXE) == RESET);
+			USART_SendData(USART1,0x31);
+		while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
 
 
 		if(flag_lost_compass_times++ > 250)
@@ -850,14 +868,14 @@ int GY_26_Get_Angle(void)
 			if(flag_compass_adjust-- == 0)
 			{
 				flag_enter_in_mode_wwdg = 1;
-				USART_SendData(UART4,0XC1);  //停止校准	
-					while (USART_GetFlagStatus(UART4, USART_FLAG_TXE) == RESET);
+				USART_SendData(USART1,0XC1);  //停止校准	
+					while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
 				Delay_ms(20);
-				USART_SendData(UART4,0XC1);  //停止校准	
-					while (USART_GetFlagStatus(UART4, USART_FLAG_TXE) == RESET);
+				USART_SendData(USART1,0XC1);  //停止校准	
+					while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
 				Delay_ms(20);
-				USART_SendData(UART4,0XC1);  //停止校准	
-					while (USART_GetFlagStatus(UART4, USART_FLAG_TXE) == RESET);
+				USART_SendData(USART1,0XC1);  //停止校准	
+					while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
 				Delay_ms(20);
 				Moto_Direction_Turn( MOTO_STOP, 0, 0);	
 				flag_enter_in_mode_wwdg = 0;
@@ -1192,7 +1210,7 @@ void	RF_CHECK(void)
 	
 	if(flag_get_rf_state == 0) //未安装或者异常
 	{
-			printf("RF_CHECK  NO device\r\n");
+//			printf("RF_CHECK  NO device\r\n");
 			while(1)
 			{
 			//		printf("RF_CHECK  NO device\r\n");
@@ -1207,7 +1225,7 @@ void	RF_CHECK(void)
 	{
 		
 		wake_up_rf();
-		printf("\r\n wake_up_rf SET rf\r\n");
+//		printf("\r\n wake_up_rf SET rf\r\n");
 		write_ch_rf(66);
 		Delay_ms(6); 
 		config_rf_persistent_connection_RX();
@@ -1218,7 +1236,7 @@ void	RF_CHECK(void)
 		
 	}else //正常状态
 	{
-		printf("\r\nSET rf\r\n");
+//		printf("\r\nSET rf\r\n");
 		write_ch_rf(66);
 		Delay_ms(6); 
 		config_rf_persistent_connection_RX();

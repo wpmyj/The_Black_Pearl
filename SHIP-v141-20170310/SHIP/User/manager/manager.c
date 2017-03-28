@@ -142,13 +142,9 @@ void 	Ship_ALL_Init(void)
 
 #ifdef DEBUG_MODE
 
-    USART1_Config();
-    printf("\r\n USART1_Config!!\r\n");
 
-
-    USART1_printf(USART1,"HELLO  version [%d]\r\n",VERSION);
-    USART1_printf(USART1,"HELLO  version 1 [%f]version 2 [%f]\r\n",(double)(VERSION+0.1415926),(double)(VERSION+0.1415926));
-
+//    USART1_printf(USART1,"HELLO  version [%d]\r\n",VERSION);
+//  	USART1_printf(USART1,"HELLO  version 1 [%f]version 2 [%f]\r\n",(double)(VERSION+0.1415926),(double)(VERSION+0.1415926));
 
     OLED_Init();
     OLED_ShowString(0,0,"debug mode",12);
@@ -169,8 +165,11 @@ void 	Ship_ALL_Init(void)
 
     uKey_Init();
 
-    TIM5_Configuration();
-    TIM5_NVIC_Configuration();
+//    TIM5_Configuration();  //tm32f103vbt6 没有tim5
+//    TIM5_NVIC_Configuration(); //tm32f103vbt6 没有tim5
+
+    TIM4_Configuration();  //tm32f103vbt6 没有tim5，只有1 2 3 4 
+    TIM4_NVIC_Configuration(); //tm32f103vbt6 没有tim5，只有1 2 3 4 
 
     /* 初始化GPS模块使用的接口（UART2） */
     GPS_Config();		 //缺少器件检测
@@ -188,7 +187,7 @@ void 	Ship_ALL_Init(void)
 
     //USART3
     Bt_Receive_Init();
-    printf("\r\n  Bt_Receive_Init ok!!\r\n");
+//    printf("\r\n  Bt_Receive_Init ok!!\r\n");
     //新的pcb 接受compass修改为uart4
     GY_26_Receive_Init();
 
@@ -199,10 +198,10 @@ void 	Ship_ALL_Init(void)
     LEDS_ULN2003_GPIO_Config();
     LEDC_ALL(1);
     LEDC_OTHER(1);
-    printf("\r\n LEDS_ULN2003_GPIO_Config ok!!\r\n");
+//    printf("\r\n LEDS_ULN2003_GPIO_Config ok!!\r\n");
     Delay_ms(100);
     RF_CHECK(); // 检测rf是否正常
-    printf("\r\n RF_CHECK ok!!\r\n");
+//    printf("\r\n RF_CHECK ok!!\r\n");
     Moto_Direction_Moto_Z_100_pwm();
     Moto_Direction_0_pwm();
 //		Moto_Direction_Moto_F_100_pwm();
@@ -236,7 +235,7 @@ void 	Ship_stop_enter_normal_Init(void)
 
 
     USART1_Config();
-    printf("\r\n Ship_stop_enter_normal_Init ENTER!!\r\n");
+//    printf("\r\n Ship_stop_enter_normal_Init ENTER!!\r\n");
 
     SetSysClockTo72();
 
@@ -290,7 +289,7 @@ void 	Ship_stop_enter_normal_Init(void)
 
     WWDG_Config(0X7F, 0X5F, WWDG_Prescaler_1); // 5ms
     Feed_Dog_When_Hungry();
-    printf("\r\n Ship_stop_enter_normal_Init END!!\r\n");
+//    printf("\r\n Ship_stop_enter_normal_Init END!!\r\n");
     Delay_ms(50);
 
 
@@ -378,7 +377,7 @@ void set_start_local(void)
 {
     longitude_CH[0] = sure_longitude;
     dimensionality_CH[0] = sure_dimensionality;
-    USART1_printf(USART1,"ch 0 = [%f][%f]\r\n",longitude_CH[0],dimensionality_CH[0]);
+//    USART1_printf(USART1,"ch 0 = [%f][%f]\r\n",longitude_CH[0],dimensionality_CH[0]);
 
 }
 
@@ -1440,11 +1439,11 @@ int AS14B_Get_buff(void)
                 flag_enter_in_mode_wwdg = 1;
                 //		printf("compass----------------------------\r\n");
                 Delay_ms(20); //为何迅速变成0
-                USART_SendData(UART4,0XC0);  // 校准
+                USART_SendData(USART1,0XC0);  // 校准
                 Delay_ms(20);
-                USART_SendData(UART4,0XC0);  // 校准
+                USART_SendData(USART1,0XC0);  // 校准
                 Delay_ms(20);
-                USART_SendData(UART4,0XC0);  // 校准
+                USART_SendData(USART1,0XC0);  // 校准
 
                 flag_compass_adjust  = 5000;
                 Moto_Direction_Turn( MOTO_ROLL_LIGHT, 40, 40);
@@ -1469,7 +1468,7 @@ int AS14B_Get_buff(void)
                     setBeepBlood = BCONTROL;
                     key3Cmd = 1;
 
-                    USART1_printf(USART1,"GO_CH[0]\r\n");
+//                    USART1_printf(USART1,"GO_CH[0]\r\n");
                 }
                 else
                     ;
@@ -1498,7 +1497,6 @@ int AS14B_Get_buff(void)
 
                 respond[6] |= 0x40; //0b10000000;
 
-                USART1_printf(USART1,"ch1:[%f][%f]\r\n",longitude_CH[1],dimensionality_CH[1]);
                 //	printf("CH1-----------------Moto_Direction_Turn-----------\r\n");
                 break;
 
@@ -1508,8 +1506,7 @@ int AS14B_Get_buff(void)
                 longitude_CH[2] = sure_longitude;
                 dimensionality_CH[2] = sure_dimensionality;
                 respond[6] |=  0x20;// 0b01000000;
-                USART1_printf(USART1,"ch2:[%f][%f]\r\n",longitude_CH[2],dimensionality_CH[2]);
-                //	printf("CH2-----------------Moto_Direction_Turn-----------\r\n");
+
                 break;
             case CH3:  //设置终点3
                 Moto_Direction_Turn(MOTO_STOP, 0, 0);
@@ -1517,8 +1514,7 @@ int AS14B_Get_buff(void)
                 longitude_CH[3] = sure_longitude;
                 dimensionality_CH[3] = sure_dimensionality;
                 respond[6] |= 0x10;//0b00100000;
-                USART1_printf(USART1,"ch3:[%f][%f]\r\n",longitude_CH[3],dimensionality_CH[3]);
-                //			printf("CH3--------------------Moto_Direction_Turn--------\r\n");
+      
                 break;
 
             case CH4:  //设置终点4
@@ -1527,8 +1523,7 @@ int AS14B_Get_buff(void)
                 longitude_CH[4] = sure_longitude;
                 dimensionality_CH[4] = sure_dimensionality;
                 respond[6] |= 0x08;//0b00010000;
-                USART1_printf(USART1,"ch4:[%f][%f]\r\n",longitude_CH[4],dimensionality_CH[4]);
-                //		printf("CH4---------------Moto_Direction_Turn-------------\r\n");
+     
                 break;
 
             case GO_CH:
@@ -1542,7 +1537,7 @@ int AS14B_Get_buff(void)
                 uCmd = USHIPGO;
                 setBeepBlood = BCONTROL;
                 key3Cmd = 1;
-                USART1_printf(USART1,"GO_CH[%d]\r\n",AS14B_receive_buf[4]);
+            
                 break;
             case FEED_BIN_D:
                 //				printf("FEED_BIN_D----------------------------\r\n");
@@ -1631,7 +1626,7 @@ int AS14B_Get_buff(void)
                 longitude_CH[AS14B_receive_buf[20]] = GPS_longituder.d;
 
                 respond[6] |= (0x80 >>(AS14B_receive_buf[20] ));
-                USART1_printf(USART1,"ip_ch%d:[%f][%f]\r\n",AS14B_receive_buf[20],longitude_CH[AS14B_receive_buf[20]],dimensionality_CH[AS14B_receive_buf[20]]);
+//								USART1_printf(USART1,"ip_ch%d:[%f][%f]\r\n",AS14B_receive_buf[20],longitude_CH[AS14B_receive_buf[20]],dimensionality_CH[AS14B_receive_buf[20]]);
             }
         }
 
@@ -1665,7 +1660,7 @@ int AS14B_Get_buff(void)
                 dimensionality_CH[AS14B_receive_buf[20]] = GPS_dimensionality.d;
                 longitude_CH[AS14B_receive_buf[20]] = GPS_longituder.d;
                 respond[6] |= (0x80 >>(AS14B_receive_buf[20] ));
-                USART1_printf(USART1,"ip_ch%d:[%f][%f]\r\n",AS14B_receive_buf[20],longitude_CH[AS14B_receive_buf[20]],dimensionality_CH[AS14B_receive_buf[20]]);
+//                USART1_printf(USART1,"ip_ch%d:[%f][%f]\r\n",AS14B_receive_buf[20],longitude_CH[AS14B_receive_buf[20]],dimensionality_CH[AS14B_receive_buf[20]]);
             }
         }
         flag_rf_send_error = 0;
@@ -1794,7 +1789,7 @@ int AS14B_Get_ADDR(void)
         if(timeout++ > 50)
         {
 
-            STMFLASH_Read(0X0803ff00,RESPOND_ADDR, 2);
+            STMFLASH_Read(0X0801ff00,RESPOND_ADDR, 2);
 
             respond[0] =(uint8_t) RESPOND_ADDR[0] ;
             respond[1] =(uint8_t)	RESPOND_ADDR[1] ;
@@ -1803,7 +1798,7 @@ int AS14B_Get_ADDR(void)
             Delay_ms(15);
             write_address_rf((u8)(RESPOND_ADDR[1]),(u8)(RESPOND_ADDR[0]));
 
-            printf("\r\nGet Addr FAIL !!! TIME OUT and use old addr  -%2x-%2x-\r\n",respond[0], respond[1] );
+//            printf("\r\nGet Addr FAIL !!! TIME OUT and use old addr  -%2x-%2x-\r\n",respond[0], respond[1] );
             break;
         }
 
@@ -1920,8 +1915,8 @@ void  Check_our_Board_and_warnning(void)
             if(flag_COMPASS_OK_times <= 0)
                 Oled_Show_GOMPASS_Error();
 
-            printf("flag_COMPASS_OK_times = %d\r\n",flag_COMPASS_OK_times);
-            printf("flag_AS14B_OK_times = %d\r\n",flag_AS14B_OK_times);
+//            printf("flag_COMPASS_OK_times = %d\r\n",flag_COMPASS_OK_times);
+//            printf("flag_AS14B_OK_times = %d\r\n",flag_AS14B_OK_times);
             while(1)
             {
                 LEDC_ALL(1);
@@ -1931,8 +1926,8 @@ void  Check_our_Board_and_warnning(void)
             }
         }
 
-        USART_SendData(UART4,0x31);
-        while (USART_GetFlagStatus(UART4, USART_FLAG_TXE) == RESET);
+        USART_SendData(USART1,0x31);
+        while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
         while(!flag_4ms_set);  //如果时间不足4ms，则再此处阻塞。
         flag_4ms_set = 0;
         Timer_In_Function();
@@ -1943,7 +1938,7 @@ void  Check_our_Board_and_warnning(void)
         }
     }
 
-    printf("Check_our_Board Over and NO warnning  GOOD LUCK\r\n");
+//    printf("Check_our_Board Over and NO warnning  GOOD LUCK\r\n");
 }
 
 //      1225 ADD code
@@ -2083,9 +2078,8 @@ checkFirst:
                     for(a=0; a<7; a++)
                     {
                         AS14B_receive_buf[a] = UART3_CODE[i+1+a+1];
-                 //       printf("-%02x  ",AS14B_receive_buf[a] );
                     }
-                //    printf("\r\n");
+             
 
                     state = 100;
                     break;
@@ -2190,7 +2184,7 @@ checkFirst:
         {
             respond[0] = AS14B_receive_buf[0];
             respond[1] = AS14B_receive_buf[1];
-            //		printf("\r\nGet Addr -%2x-%2x-\r\n", respond[0] , respond[1] );
+//						printf("\r\nGet Addr -%2x-%2x-\r\n", respond[0] , respond[1] );
 
             RESPOND_ADDR[0] = respond[0];
             RESPOND_ADDR[1] = respond[1];
@@ -2199,7 +2193,7 @@ checkFirst:
             Ship_Board_Data.ship_addr[0] = AS14B_receive_buf[0];
             Ship_Board_Data.ship_addr[1] = AS14B_receive_buf[1];
 
-            STMFLASH_Write(0X0803ff00,RESPOND_ADDR,2);
+            STMFLASH_Write(0X0801ff00,RESPOND_ADDR,2);
 
 
             write_ch_rf((((u8)(RESPOND_ADDR[0]))&(~0x80)) -5);
@@ -2210,7 +2204,7 @@ checkFirst:
             memset(AS14B_receive_buf, 0, sizeof(AS14B_receive_buf) );
         }
 
-        printf("\r\nGet NEW Addr -%2x-%2x-\r\n", respond[0], respond[1] );
+//        printf("\r\nGet NEW Addr -%2x-%2x-\r\n", respond[0], respond[1] );
 
     }
     UART3_CODE[0] = 0;

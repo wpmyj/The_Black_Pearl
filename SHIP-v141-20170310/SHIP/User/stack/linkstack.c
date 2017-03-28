@@ -116,11 +116,11 @@ void print_linkstack(linkstack_t *lsp)
 {
 	while(NULL != lsp->next){
 		lsp = lsp->next;
-		printf("\r\nlsp->xxxxxxx =  %lf ",lsp->x);
-		printf("lsp->yyyyyyy =  %lf\r\n",lsp->y);
+//		printf("\r\nlsp->xxxxxxx =  %lf ",lsp->x);
+//		printf("lsp->yyyyyyy =  %lf\r\n",lsp->y);
 	}
 
-	printf("\r\n-------------end-------\r\n\n");
+//	printf("\r\n-------------end-------\r\n\n");
 }
 
 

@@ -75,7 +75,10 @@ temp2 = *(__IO u32*)(0x1FFFF7F0);
 		// 2017Äê 2ÔÂ 10ÈÕ  37898
 		
 		if((CRCID ==  36777) || (CRCID ==  42927) || (CRCID ==  12207) || (CRCID ==  48878) || (CRCID ==  37898)|| \
-			(CRCID ==  0x2acb)|| (CRCID ==  0x2690)|| (CRCID ==  0xd6e5)|| (CRCID ==  0x25af)|| (CRCID ==  0xb6ac))
+			(CRCID ==  0x2acb)|| (CRCID ==  0x2690)|| (CRCID ==  0xd6e5)|| (CRCID ==  0x25af)|| (CRCID ==  0xb6ac) \
+		|| (CRCID ==  0xae52)  //    
+		
+		)
 			return 1;
 		else
 			while(1);
@@ -102,7 +105,7 @@ SerialID[0] = *(unsigned int*)(0x1FFFF7E8);
 */
   
 
-#define  FLASH_START_ADDR 0x803f000
+#define  FLASH_START_ADDR 0x801f000
 
 FLASH_FLAG FLASH_STATUS;
 

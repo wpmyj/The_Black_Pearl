@@ -100,7 +100,8 @@ void WWDG_IRQHandler(void)
         Feed_Dog_When_Hungry();
     }
     else
-        printf("r=%d",debug_num);
+			;
+//        printf("r=%d",debug_num);
 }
 
 
@@ -110,6 +111,15 @@ void TIM5_IRQHandler(void)
     {
         flag_4ms_set++;
         TIM_ClearITPendingBit(TIM5, TIM_FLAG_Update);
+    }
+}
+
+void TIM4_IRQHandler(void)
+{
+    if ( TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET )
+    {
+        flag_4ms_set++;
+        TIM_ClearITPendingBit(TIM4, TIM_FLAG_Update);
     }
 }
 
@@ -161,7 +171,7 @@ void USART3_IRQHandler(void)
     }
 }
 
-
+/*
 void UART4_IRQHandler(void)
 {
     uint8_t ch;
@@ -178,7 +188,25 @@ void UART4_IRQHandler(void)
         flag_lost_compass_times = 0;
     }
 }
+*/
 
+
+void USART1_IRQHandler(void)
+{
+    uint8_t ch;
+    static int i = 0;
+
+    if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
+    {
+        ch = USART_ReceiveData(USART1);
+
+        if((ch != 0x0a) )
+            angle_receive_buf[i++] = ch;
+        else
+            i = 0;
+        flag_lost_compass_times = 0;
+    }
+}
 /********************************************************* end *************************************************************************/
 /********************************************************* end *************************************************************************/
 
@@ -285,10 +313,7 @@ void PendSV_Handler(void)
 /*  available peripheral interrupt handler's name please refer to the startup */
 /*  file (startup_stm32f10x_xx.s).                                            */
 /******************************************************************************/
-void USART1_IRQHandler(void)
-{
 
-}
 
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

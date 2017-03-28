@@ -21,6 +21,7 @@ int main(void)
 #ifdef WWDOG
     WWDG_Config(0X7F, 0X5F, WWDG_Prescaler_8); // 10ms
 #endif
+			
     while(1)
     {
         Board_Data_Refresh();
@@ -55,6 +56,7 @@ int main(void)
             RefreshCnt = 0;
             GPS_Check_in_using();
             Post_GPS_Data_Fresh(); //无线发送数据，每次10s执行一次，发送GPS数据
+					
         }
 
         if(RefreshCnt/30 == 0)
@@ -71,7 +73,7 @@ int main(void)
 				
         /*-------------------------------- new code  here   end   --------------------------------*/
         while(!flag_4ms_set);//如果时间不足4ms，则再此处阻塞。
-        //		printf("\r\n flag_4ms_set = %d\r\n",flag_4ms_set);
+    
         flag_4ms_set = 0;
         Timer_In_Function();
         /*

@@ -8,6 +8,7 @@
 // UART1  log  调试打印信息
 
  void USART1_Config(void);
+ void  USART1_NVIC_Configuration(void);
  int  fputc(int ch, FILE *f);
  int  fgetc(FILE *f);
 
