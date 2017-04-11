@@ -363,7 +363,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
+              <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER,STM32F103VCT6_MCU</Define>
               <Undefine></Undefine>
               <IncludePath>.\Libraries\FWlib\inc;.\User\adc;.\User\gps;.\User\Key;.\User\L9110;.\User\led;.\User\manager;.\User\moto;.\User\nmea_decode\include;.\User\OLED;.\User\PwmOutput;.\User\secret;.\User\stack;.\User\Stop_Mode;.\User\SysTick;.\User\temperature;.\User\TIM5;.\User\usart;.\User\wwdog;.\Libraries\CMSIS\startup;.\Libraries\CMSIS;.\User</IncludePath>
             </VariousControls>

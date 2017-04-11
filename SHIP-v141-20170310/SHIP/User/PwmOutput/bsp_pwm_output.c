@@ -269,7 +269,6 @@ u8 uCMDbeep_A1(void)
 
 	if((setBeepBlood != setBeepBlood_pre))
 	{
-	
 			setBeepBlood_pre = setBeepBlood;
 		
 		//	printf("setBeepBlood = %d\r\n",setBeepBlood);
@@ -278,11 +277,21 @@ u8 uCMDbeep_A1(void)
 			TIM2_GPIO_Config();
 	}
 	
-
-		
 	
 //	printf("setBeepBlood = %d\r\n",setBeepBlood);
 //	printf("beepNum = %d\r\n",beepNum);
+	
+	if(setBeepBlood != 10)
+	{
+			USART_SendData(UART4, setBeepBlood + '0');
+			while( USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET );
+			USART_SendData(UART4, 0x0d);
+			while( USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET );
+			USART_SendData(UART4, 0x0a);
+			while( USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET );
+	
+	}
+
 	
 	switch (setBeepBlood)
 	{
@@ -306,29 +315,12 @@ u8 uCMDbeep_A1(void)
 					}
 			}
 			break;
+			
 		case BEEPOFF:
 //			TIM_Cmd(TIM5, DISABLE);
 			TIM2_GPIO_Deinit();
 			break;
-		case BPOWERON:
-			if(!beepCnt)
-			{
-					beepNum = 2;
-			}
-			else
-			{
-					if(beepCnt==1)
-							TIM2_Mode_Change(28800,20000);
-					if(beepCnt==25)
-							TIM2_Mode_Change(28800,0);
-					if(beepCnt==50)
-					{
-							beepCnt = 0;
-							if(--beepNum<=0)
-								{setBeepBlood = BEEPOFF;}
-					}
-			}
-			break;
+		
 		case BCONTROL:
 			if(!beepCnt)
 			{
@@ -396,14 +388,6 @@ u8 uCMDbeep_A1(void)
 			if(beepCnt == 410)
 					beepCnt = 0;
 			break;
-		case BTRUE:
-			if(beepCnt==1)
-					TIM2_Mode_Change(35000,50);
-			if(beepCnt==100)
-					TIM2_Mode_Change(35000,0);
-			if(beepCnt==200)
-					beepCnt = 0;
-			break;	
 		case BEND:
 			if(!beepCnt)
 			{

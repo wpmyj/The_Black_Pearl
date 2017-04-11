@@ -52,6 +52,9 @@ void Post_GPS_Data(double how_dimensionality, double how_longitude,u8 type);
 
 
 
+void USART4_Config(void);
+
+
 // rf functions
 
 	void rfUart_SendCMD(u8* Data,u8 len);

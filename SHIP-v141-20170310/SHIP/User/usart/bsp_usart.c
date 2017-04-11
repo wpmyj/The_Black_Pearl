@@ -725,7 +725,7 @@ void USART4_Config(void)
 		USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 		USART_Init(UART4, &USART_InitStructure); 
 		
-		USART_ITConfig(UART4, USART_IT_RXNE, ENABLE);
+	//	USART_ITConfig(UART4, USART_IT_RXNE, ENABLE);
 		USART_Cmd(UART4, ENABLE);
 }
 

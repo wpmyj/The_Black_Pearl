@@ -21,6 +21,8 @@
 #include "stop_mode.h"
 #include "secret.h"
 
+//#define STM32F103VCT6_MCU 1 //使用软件配置，保证各个文件都能共享。
+
 /*      ===================================               宏定义          ===================================              */
 
 #define DEBUG_MODE  // 使用printf输出
@@ -143,9 +145,15 @@ void 	Ship_ALL_Init(void)
 #ifdef DEBUG_MODE
 
 
-//    USART1_printf(USART1,"HELLO  version [%d]\r\n",VERSION);
-//  	USART1_printf(USART1,"HELLO  version 1 [%f]version 2 [%f]\r\n",(double)(VERSION+0.1415926),(double)(VERSION+0.1415926));
-
+	#ifdef STM32F103VCT6_MCU
+		USART4_Config();
+	
+		USART4_printf(UART4, "hello  uart4 \r\n");
+//     USART3_printf( USART3, "\r\n %s \r\n", j );(USART1,"HELLO  version [%d]\r\n",VERSION);
+//  	 USART3_printf( USART3, "\r\n %s \r\n", j );(USART1,"HELLO  version 1 [%f]version 2 [%f]\r\n",(double)(VERSION+0.1415926),(double)(VERSION+0.1415926));
+//
+	#endif
+	
     OLED_Init();
     OLED_ShowString(0,0,"debug mode",12);
     OLED_Refresh_Gram_New();
@@ -1002,11 +1010,13 @@ void Oled_Show(void)
     }
     else if(flag_refresh_page == 5)
     {
-
+			
         OLED_ShowString(0,36,"CA",12);  //第四行
         OLED_ShowNum(24,36,(u32)Angle,6,12);
 
         //第五行 暂时未使用
+				OLED_ShowString(0,48,"B",12);  //第四行
+				OLED_ShowNum(24,48,setBeepBlood,6,12); //显示蜂鸣器此时的数据
         flag_refresh_page = 0;
     }
 

@@ -176,18 +176,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>78</LineNumber>
+          <LineNumber>79</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134219862</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\Aisen\Desktop\WORK\ship\2017\SHIP-v141-20170310\STM32_bootloader锛峷3.1\STM32_bootloader锛峷3.1\stm32_Demo\secret\secret.c</Filename>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\secret\secret.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\STM32_DEMO\../secret/secret.c\78</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
