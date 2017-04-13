@@ -1207,6 +1207,12 @@ void Queue_Beep_On(void)
         setBeepBlood = BEEP_ALL_ON_LOW_POWER;
     }
 
+		
+		#ifdef STM32F103VCT6_MCU
+//					USART_SendData(UART4, setBeepBlood + 0xf0);
+//			while( USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET );
+		#endif
+		
     last_beep_cmd = setBeepBlood;
 
 }

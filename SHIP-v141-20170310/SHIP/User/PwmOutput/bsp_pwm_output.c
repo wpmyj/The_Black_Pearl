@@ -28,7 +28,7 @@
 
 u8 setBeepBlood;
 static u8 setBeepBlood_pre = 0;
-static int beepNum, beepCnt;
+static int beepNum = 0, beepCnt = 0 ;
 
 static void TIM3_GPIO_Config(void) 
 {
@@ -264,32 +264,39 @@ u8 uCMDbeep_A1(void)
 {
 	
 	
-	if(beepCnt++ != 1)
+	
+if((setBeepBlood == BEEPOFF))
+{
+		setBeepBlood = setBeepBlood_pre=BEEPOFF;
+	
+		beepNum = 0;
+		beepCnt = 0;
+}
+	
+	
+if(beepCnt++ != 1)
 		setBeepBlood = setBeepBlood_pre;
 
-	if((setBeepBlood != setBeepBlood_pre))
+
+if((setBeepBlood != setBeepBlood_pre))
 	{
-			setBeepBlood_pre = setBeepBlood;
-		
+			setBeepBlood_pre = setBeepBlood;	
+			
 		//	printf("setBeepBlood = %d\r\n",setBeepBlood);
 			beepNum = 0;
 			beepCnt = 0;
 			TIM2_GPIO_Config();
+		
+		
 	}
 	
 	
-//	printf("setBeepBlood = %d\r\n",setBeepBlood);
-//	printf("beepNum = %d\r\n",beepNum);
-	
 	if(setBeepBlood != 10)
 	{
+#ifdef STM32F103VCT6_MCU
 			USART_SendData(UART4, setBeepBlood + '0');
 			while( USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET );
-			USART_SendData(UART4, 0x0d);
-			while( USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET );
-			USART_SendData(UART4, 0x0a);
-			while( USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET );
-	
+#endif
 	}
 
 	
@@ -297,28 +304,23 @@ u8 uCMDbeep_A1(void)
 	{
 
 		case RECEIVE_CMD_NOTICE:
-				if(!beepCnt)
-			{
-					beepNum = 1;
-			}
-			else
-			{
+
 					if(beepCnt==1)
 							TIM2_Mode_Change(45000,20000);
 					if(beepCnt==20)
 							TIM2_Mode_Change(45000,0);
 					if(beepCnt==40)
 					{
-							beepCnt = 0;
-							if(--beepNum <= 0); // 1106  == ---> <=
+								beepCnt = 0;
 								{setBeepBlood = BEEPOFF;}
 					}
-			}
+			
 			break;
 			
 		case BEEPOFF:
 //			TIM_Cmd(TIM5, DISABLE);
 			TIM2_GPIO_Deinit();
+	//		beepCnt = 0;
 			break;
 		
 		case BCONTROL:
@@ -429,6 +431,8 @@ u8 uCMDbeep_A1(void)
 			break;
 		default:
 			beepCnt = 0;
+			beepNum = 0;
+			setBeepBlood = setBeepBlood_pre = BEEPOFF;
 			break;
 	}
 	
