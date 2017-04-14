@@ -1,5 +1,19 @@
 
 
+/******************************************		new verion		************************************************/
+
+version 141 
+(data:2017/04/14)
+
+1st	:	set less time when RECEIVE_CMD_NOTICE.
+
+2nd	:	all style.
+
+3rd	:	please delect ',STM32F103VCT6_MCU' in option when released.
+
+4th	:	if there is some problem, then modify
+
+
 141 0411
 
 

@@ -363,7 +363,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER,STM32F103VCT6_MCU</Define>
+              <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
               <IncludePath>.\Libraries\FWlib\inc;.\User\adc;.\User\gps;.\User\Key;.\User\L9110;.\User\led;.\User\manager;.\User\moto;.\User\nmea_decode\include;.\User\OLED;.\User\PwmOutput;.\User\secret;.\User\stack;.\User\Stop_Mode;.\User\SysTick;.\User\temperature;.\User\TIM5;.\User\usart;.\User\wwdog;.\Libraries\CMSIS\startup;.\Libraries\CMSIS;.\User</IncludePath>
             </VariousControls>
@@ -534,16 +534,6 @@
               <FilePath>.\Libraries\FWlib\src\stm32f10x_bkp.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f10x_can.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Libraries\FWlib\src\stm32f10x_can.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_cec.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Libraries\FWlib\src\stm32f10x_cec.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f10x_crc.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Libraries\FWlib\src\stm32f10x_crc.c</FilePath>
@@ -574,11 +564,6 @@
               <FilePath>.\Libraries\FWlib\src\stm32f10x_flash.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f10x_fsmc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Libraries\FWlib\src\stm32f10x_fsmc.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f10x_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Libraries\FWlib\src\stm32f10x_gpio.c</FilePath>
@@ -607,11 +592,6 @@
               <FileName>stm32f10x_rtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Libraries\FWlib\src\stm32f10x_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_sdio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Libraries\FWlib\src\stm32f10x_sdio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_spi.c</FileName>

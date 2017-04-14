@@ -1091,7 +1091,6 @@ void check_star_and_beep(void)
     }
 }
 
-
 void Queue_Beep_On(void)
 {
     double  distant_lost_star = 0;
@@ -1100,10 +1099,10 @@ void Queue_Beep_On(void)
 
     if((last_beep_cmd == RECEIVE_CMD_NOTICE)&&(setBeepBlood == BEEPOFF))
     {
-        if(flag_set_beep_free ++ < 1000)
+        if(flag_set_beep_free ++ < 50)
             return;
     }
-    if((flag_set_beep_free ++ < 1000)&&(setBeepBlood == RECEIVE_CMD_NOTICE))
+    if((flag_set_beep_free ++ < 50)&&(setBeepBlood == RECEIVE_CMD_NOTICE)) //		depend on {		if(beepCnt==40) setBeepBlood == BEEPOFF  }
     {
         last_beep_cmd = setBeepBlood;
         return ;

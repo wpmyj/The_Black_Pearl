@@ -263,19 +263,16 @@ void TIM2_PWM_Init(void)
 u8 uCMDbeep_A1(void)
 {
 	
-	
-	
 if((setBeepBlood == BEEPOFF))
 {
-		setBeepBlood = setBeepBlood_pre=BEEPOFF;
-	
+		setBeepBlood = setBeepBlood_pre = BEEPOFF;
 		beepNum = 0;
 		beepCnt = 0;
 }
-	
-	
+
 if(beepCnt++ != 1)
 		setBeepBlood = setBeepBlood_pre;
+
 
 
 if((setBeepBlood != setBeepBlood_pre))
@@ -286,8 +283,6 @@ if((setBeepBlood != setBeepBlood_pre))
 			beepNum = 0;
 			beepCnt = 0;
 			TIM2_GPIO_Config();
-		
-		
 	}
 	
 	

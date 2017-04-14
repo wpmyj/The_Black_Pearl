@@ -13,7 +13,6 @@
 
 /* Public macro --------------------------------------------------------------*/
 
-
 int main(void)
 {
 //   int temp_number = 0;
@@ -30,6 +29,7 @@ int main(void)
         AS14B_Get_Buff_Before(); //无线获取命令及数据  S14B_Get_buff();
 
         //接受数据，平台相关，需要中断不断接受数据和处理。
+			  Queue_Beep_On();
 			
         uCMDbeep_A1(); //按键蜂鸣器
 
@@ -49,21 +49,17 @@ int main(void)
 
         Control_Led_Toggle();  //控制灯 闪烁及时间
 
-        Queue_Beep_On();
-
         if(++RefreshCnt>200) //计时时间 1s， 长时间执行一次的操作
         {
             RefreshCnt = 0;
             GPS_Check_in_using();
             Post_GPS_Data_Fresh(); //无线发送数据，每次10s执行一次，发送GPS数据
-					
         }
 
         if(RefreshCnt/30 == 0)
 				{
             Oled_Show(); // 显示屏显示，每次 *ms 更新一次
 				}
-
         Moto_Chang_Control_Roll();
 
 #ifdef WWDOG
@@ -73,8 +69,7 @@ int main(void)
 				
         /*-------------------------------- new code  here   end   --------------------------------*/
         while(!flag_4ms_set);//如果时间不足4ms，则再此处阻塞。
-    
-        flag_4ms_set = 0;
+				flag_4ms_set = 0;
         Timer_In_Function();
         /*
         				//	sysIndictor(); //系统提示， led闪烁
