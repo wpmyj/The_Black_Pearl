@@ -1,4 +1,16 @@
 
+/******************************************		new verion		************************************************/
+
+version 141 
+(data:2017/04/14)
+
+1st	:	more brief explanatory note. 
+
+2nd	:	all style.
+
+3rd	:	add text in readme.txt for more information
+
+
 
 /******************************************		new verion		************************************************/
 

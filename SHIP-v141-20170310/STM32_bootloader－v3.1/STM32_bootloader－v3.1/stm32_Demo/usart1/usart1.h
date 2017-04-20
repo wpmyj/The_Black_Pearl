@@ -2,7 +2,11 @@
 #define __USART1_H
 #include "stm32f10x.h"
 #include <stdio.h>
-void USART1_Configuration(void);
+
+#define USART1_PRINTF
+
+
+void USART_Configuration(void);
 int fputc(int ch, FILE *f);
 int GetKey(void);
 void Uart1_PutChar(u8 ch);

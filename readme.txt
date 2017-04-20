@@ -1,13 +1,87 @@
 
+/******************************************		new verion		************************************************/
+
+version 142
+(data:2017/04/20)
+
+1st	:	more brief explanatory note. 
+
+2nd	:	all style.
+
+3rd	:	add text in readme.txt for more information
+
+
+
+& other
+
+
+
+/*****************************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************************/
+
+代码更新git:
+
+https://github.com/freelinli/The_Black_Pearl
+
+
+1 	keilkill.bat	为windows下清理中间文件的脚本。
+	keilkill.sh 	为linux及mac下清理中间文件的脚本
+	
+2  	BootLoader引导程序说明：
+		secret.c中，CRCID为stm32的序列号。在加密状态下，需要将其序列号增加到其中，否则无法正常工作。
+		secret.c中，#define  FLASH_START_ADDR 0x801f000 是将相关数据写到指定地址，进行和应用程序匹配，两者是先后顺序。
+		secret.c中， f_open(&fdst,"0:/TEST.bin",FA_OPEN_EXISTING|FA_READ); 文件名更改，替换TEST.bin即可。
+		
+		iap.h中，#define  FLASH_APP_ADDR		0x08008000	应用程序的跳转地址，可根据需要进行修改。此处修改，则应用程序的设置也需要更改。
+		
+		usart1.c中，目前printf输出依然采用USART1。需要和应用程序统一的话，可更改为uart4。修改宏定义即可。//#define USART1_PRINTF
+					usart1 波特率 115200; uart4 波特率 9600;(uart4 只是简单测试可输出，均正常，整体未测，若是采用，确保安全，在测试一次)
+					
+
+3 	ship应用程序说明：
+		如果更改BootLoader中的FLASH_APP_ADDR定义，则需要更改两处：
+					system_stm32f10x.c中，#define VECT_TAB_OFFSET 0x08008000
+					option 中，target选项，IROM1，start填写VECT_TAB_OFFSET地址，后者填写mcu的总空间地址-VECT_TAB_OFFSET
+		option中的 c/c++选项进行配置，,STM32F103VCT6_MCU，来选择是否为VC系列。去除则兼容VBT6。VC系列可输出uart4，VB无法uart4输出。正式版本，应用VB版本。
+	牋	
+		生成hex文件：option中的 user选项进行配置Run #1:  C:\Keil_v5\ARM\ARMCC\bin\fromelf.exe --bin -o  .\TEST.bin  .\Objects\SHIP.axf
+
+
+		
+
+
+辅：keil中 all style 插件的使用方法:
+参考博客：http://www.cnblogs.com/yb1991/articles/4600642.html
+
+/*****************************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************************/
+
+
+
+/******************************************		new verion		************************************************/
+
+version 141 
+(data:2017/04/14)
+
+1st	:	set less time when RECEIVE_CMD_NOTICE.
+
+2nd	:	all style.
+
+3rd	:	please delect ',STM32F103VCT6_MCU' in option when released.
+
+4th	:	if there is some problem, then modify
+
 
 141 0411
 
 
 1 对于出现beep无缘无响起来的问题，暂时未找到相关原因。在显示屏上显示beep信息。串口打印beep的switch数据。低电量暂时不做处理。
+	错误找到9.开机后，尽快按遥控的led全开键，会导致该现象。屡试不爽.
+	已处理，应该不会再出现问题。
+	
 
 2 uart4 改为串口。在option中的 c/c++选项进行配置，,STM32F103VCT6_MCU，来选择是否为VC系列。去除则兼容VBT6.
-
-
+		注意，一定要增加,STM32F103VCT6_MCU的说明
 
 
 
@@ -36,7 +110,6 @@ stm32f103vbt6 定时器只有4路，串口只有三路。
 tim5改为tim4
 uart4改为uart1
 去除串口的功能，以后只能debug了。
-
 
 
 141 0308
@@ -466,6 +539,14 @@ void Go_Back_By_Trail(void) // 注意单位的转换
 若是未设置起点，则以开机第一次寻到的位置作为一个电压数值。需要再测试。
 
 0807 
+
+
+
+
+
+
+
+
 
 114版本
 

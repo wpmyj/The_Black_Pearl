@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Project/STM32F10x_StdPeriph_Template/main.c 
+  * @file    Project/STM32F10x_StdPeriph_Template/main.c
   * @author  MCD Application Team
   * @version V3.5.0
   * @date    08-April-2011
@@ -17,7 +17,7 @@
   *
   * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
   ******************************************************************************
-  */  
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x.h"
@@ -29,11 +29,11 @@
 #include "ff.h"
 #include "stmflash.h"
 #include "iap.h"
-#include "bsp_led.h"   
+#include "bsp_led.h"
 #include "secret.h"
 
 
-int rest,rest1;  
+int rest,rest1;
 int a;
 FIL fsrc,fdst;
 FATFS fs;
@@ -58,13 +58,13 @@ void Delay(__IO uint32_t nCount)	;
 **************************************************/
 void GPIO_Configuration(void)
 {
-  GPIO_InitTypeDef GPIO_InitStructure;        //定义GPIO初始化结构体
+    GPIO_InitTypeDef GPIO_InitStructure;        //定义GPIO初始化结构体
 
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE); 
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0; 
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 
-  GPIO_Init(GPIOB, &GPIO_InitStructure); 
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
 
 /*
@@ -73,164 +73,144 @@ void GPIO_Configuration(void)
  * 输入  ：-pBuffer 要填充的缓冲区
  *         -BufferLength 要填充的大小
  *         -Offset 填在缓冲区的第一个值
- * 输出  ：无 
+ * 输出  ：无
  */
 void Fill_Buffer(uint8_t *pBuffer, uint32_t BufferLength, uint32_t Offset)
 {
-  uint16_t index = 0;
+    uint16_t index = 0;
 
-  /* Put in global buffer same values */
-  for (index = 0; index < BufferLength; index++ )
-  {
-    pBuffer[index] = index + Offset;
-  }
+    /* Put in global buffer same values */
+    for (index = 0; index < BufferLength; index++ )
+    {
+        pBuffer[index] = index + Offset;
+    }
 }
 int main(void)
 {
-	u32 sd_size;
-	u32  i = 0;
-	u16  j = 0, k = 0;
-	u32  APP_Sector = 0;
-	u16  APP_Byte = 0;
-	delay_init(72);             //延时初始化
-	
-		//读保护
-	//*************************???????***********************************************
-//  
-//if (FLASH_GetReadOutProtectionStatus() == RESET) 
+    u32 sd_size;
+    u32  i = 0;
+    u16  j = 0, k = 0;
+    u32  APP_Sector = 0;
+    u16  APP_Byte = 0;
+    delay_init(72);             //延时初始化
+
+    //读保护
+    //*************************???????***********************************************
+//
+//if (FLASH_GetReadOutProtectionStatus() == RESET)
 //{
 //FLASH_Unlock();
-//FLASH_ReadOutProtection(ENABLE); 
+//FLASH_ReadOutProtection(ENABLE);
 //}
 // //*************************???????***********************************************
-// 
-//if (FLASH_GetReadOutProtectionStatus() == SET) 
-//{ 
+//
+//if (FLASH_GetReadOutProtectionStatus() == SET)
+//{
 
 //FLASH_Unlock();
-//FLASH_ReadOutProtection(DISABLE); 
-//} 
-	  
-	USART1_Configuration();
-	printf("\r\n =============bootloader start\r\n");
-	GPIO_Configuration();
-	LED_GPIO_Config();
-	
-	
-	// 获取id
-	Get_ChipID();  		//if ID is unabled, be in while(1);
-	
-	
-	// flash数据读写
-	FLASH_WRITE(secret_in, 16);
-	FLASH_READ(secret_out, 16);
+//FLASH_ReadOutProtection(DISABLE);
+//}
+
+    USART_Configuration();
+    printf("\r\n =============bootloader start\r\n");
+    GPIO_Configuration();
+    LED_GPIO_Config();
+
+
+    // 获取id
+    Get_ChipID();  		//if ID is unabled, be in while(1);
+
+
+    // flash数据读写
+    FLASH_WRITE(secret_in, 16);
+    FLASH_READ(secret_out, 16);
 //	for(i = 0; i < sizeof(secret_out)/sizeof(unsigned short int); i++)
-//		printf("\r\n secret_out[%d] = %d\r\n", i, secret_out[i]); 
-	
-	while(1) 
-	{		   
-			
-			while(SD_Initialize())  //检测不到SD卡
-				{
-					printf("\r\n SD Card Error!");
-					printf("\r\n Please Check !"); 
-					
-					Delay(0X0ffff);
-					LED1_TOGGLE;
-		
-					k++;
-					if(k > 10)
-						goto exit_fail;
-				}
-				
-					LED1_OFF;
-					LED1_ON;
-					Delay(0X0fffff);
-			
-			
-				
-					sd_size=SD_GetSectorCount(); 		
-					printf("\r\n  检测到sd卡 ");
-					printf("\r\n SD卡的容量：%d MB\r\n",sd_size>>11);
-		if(sd_size != 0)
-		{			
-f_mount_again:	
-					if(f_mount(0,&fs)!= FR_OK) 
-					{
-							 Delay(0X0ffff);
-						goto f_mount_again;
-					
-					}				
+//		printf("\r\n secret_out[%d] = %d\r\n", i, secret_out[i]);
 
-f_open_again:						
-					rest = f_open(&fdst,"0:/TEST.bin",FA_OPEN_EXISTING|FA_READ);  //打开或者创建文件txt		    	
-					if ( rest == FR_OK )
-					 { 
-						/* 将缓冲区的数据写到文件中 */	 //0:/STM32-DEMO.BIN
-							APP_Sector = fdst.fsize / 512;
-								APP_Byte = fdst.fsize % 512;
-								for(i = 0;i < APP_Sector;i++)
-								{
-									f_read (&fdst,ReadAppBuffer,512,(UINT *)&bw);
-									for(j = 0;j < 256;j++)  
-									{
-										ChangeBuffer[j] = (ReadAppBuffer[j * 2 + 1] << 8) + ReadAppBuffer[j * 2];	
-									}
-									LED1_TOGGLE;
-									STMFLASH_Write(FLASH_APP_ADDR + i * 512,ChangeBuffer,256);	 
-								}
-								if(APP_Byte != 0)
-								{
-									f_read (&fdst,ReadAppBuffer,APP_Byte,(UINT *)&bw);
-									for(j = 0;j < (APP_Byte / 2);j++)  
-									{
-										ChangeBuffer[j] = (ReadAppBuffer[j * 2 + 1] << 8) + ReadAppBuffer[j * 2];	
-									}
-									STMFLASH_Write(FLASH_APP_ADDR + i * 512,ChangeBuffer,APP_Byte / 2);
-								}
-						 f_close(&fdst); 
-						 printf( "\r\n 文件创建成功 \n" );       
-						}
-					 else{
-						 Delay(0X0ffff);
-					 
-					 goto f_open_again;
-					 }
-					 
-				 }
+    while(1)
+    {
+        while(SD_Initialize())  //检测不到SD卡
+        {
+            printf("\r\n SD Card Error!");
+            printf("\r\n Please Check !");
 
-						printf("\r\n =============bootloader endr\n");
-						
-	iap_load_app(FLASH_APP_ADDR);
-					LED1_ON;
-				
-						while(1);
-			exit_fail:
-					LED1_OFF;
-		
-							printf("\r\n iap_load_app ! update fail \r\n"); 
-					iap_load_app(FLASH_APP_ADDR);		
-	while(1);
-	}
-}
-//---------------------输出程序-----------------------------------/
-int fputc(int ch, FILE *f)
-{
-/* 将Printf内容发往串口 */
-  USART_SendData(USART1, (unsigned char) ch);
-  while (!(USART1->SR & USART_FLAG_TXE));
- 
-  return (ch);
-}
-//----------------------接收程序-------------------------------//
-int GetKey(void)
-{
-   while (!(USART1->SR & USART_FLAG_RXNE));
+            Delay(0X0ffff);
+            LED1_TOGGLE;
 
-   return ((int) (USART1->DR & 0x1FF));
+            k++;
+            if(k > 10)
+                goto exit_fail;
+        }
+
+        LED1_OFF;
+        LED1_ON;
+        Delay(0X0fffff);
+
+
+
+        sd_size=SD_GetSectorCount();
+        printf("\r\n  检测到sd卡 ");
+        printf("\r\n SD卡的容量：%d MB\r\n",sd_size>>11);
+        if(sd_size != 0)
+        {
+f_mount_again:
+            if(f_mount(0,&fs)!= FR_OK)
+            {
+                Delay(0X0ffff);
+                goto f_mount_again;
+
+            }
+
+f_open_again:
+            rest = f_open(&fdst,"0:/TEST.bin",FA_OPEN_EXISTING|FA_READ);  //打开或者创建文件txt
+            if ( rest == FR_OK )
+            {
+                /* 将缓冲区的数据写到文件中 */	 //0:/STM32-DEMO.BIN
+                APP_Sector = fdst.fsize / 512;
+                APP_Byte = fdst.fsize % 512;
+                for(i = 0; i < APP_Sector; i++)
+                {
+                    f_read (&fdst,ReadAppBuffer,512,(UINT *)&bw);
+                    for(j = 0; j < 256; j++)
+                    {
+                        ChangeBuffer[j] = (ReadAppBuffer[j * 2 + 1] << 8) + ReadAppBuffer[j * 2];
+                    }
+                    LED1_TOGGLE;
+                    STMFLASH_Write(FLASH_APP_ADDR + i * 512,ChangeBuffer,256);
+                }
+                if(APP_Byte != 0)
+                {
+                    f_read (&fdst,ReadAppBuffer,APP_Byte,(UINT *)&bw);
+                    for(j = 0; j < (APP_Byte / 2); j++)
+                    {
+                        ChangeBuffer[j] = (ReadAppBuffer[j * 2 + 1] << 8) + ReadAppBuffer[j * 2];
+                    }
+                    STMFLASH_Write(FLASH_APP_ADDR + i * 512,ChangeBuffer,APP_Byte / 2);
+                }
+                f_close(&fdst);
+                printf( "\r\n 文件创建成功 \n" );
+            }
+            else {
+                Delay(0X0ffff);
+
+                goto f_open_again;
+            }
+
+        }
+
+        printf("\r\n =============bootloader endr\n");
+
+        iap_load_app(FLASH_APP_ADDR);
+
+        LED1_ON;
+
+        while(1);
+exit_fail:
+        LED1_OFF;
+
+        printf("\r\n iap_load_app ! update fail \r\n");
+        iap_load_app(FLASH_APP_ADDR);
+        while(1);
+    }
 }
 
-void Delay(__IO uint32_t nCount)	 
-{
-	for(; nCount != 0; nCount--);
-}

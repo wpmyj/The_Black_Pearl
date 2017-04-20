@@ -25,7 +25,7 @@
 
 /*      ===================================               宏定义          ===================================              */
 
-#define DEBUG_MODE  // 使用printf输出
+#define DEBUG_MODE  // 使用printf输出 使能OLED
 
 
 
@@ -80,7 +80,7 @@ linkstack_t *lsp;
 
 
 /*    ===================================                 版本号          	  ===================================            */
-u32 VERSION = 141;
+u32 VERSION = 142;
 
 
 int flag_compass_adjust = -1;
@@ -145,15 +145,15 @@ void 	Ship_ALL_Init(void)
 #ifdef DEBUG_MODE
 
 
-	#ifdef STM32F103VCT6_MCU
-		USART4_Config();
-	
-		USART4_printf(UART4, "hello  uart4 \r\n");
+#ifdef STM32F103VCT6_MCU
+    USART4_Config();
+
+    USART4_printf(UART4, "hello  uart4 \r\n");
 //     USART3_printf( USART3, "\r\n %s \r\n", j );(USART1,"HELLO  version [%d]\r\n",VERSION);
 //  	 USART3_printf( USART3, "\r\n %s \r\n", j );(USART1,"HELLO  version 1 [%f]version 2 [%f]\r\n",(double)(VERSION+0.1415926),(double)(VERSION+0.1415926));
 //
-	#endif
-	
+#endif
+
     OLED_Init();
     OLED_ShowString(0,0,"debug mode",12);
     OLED_Refresh_Gram_New();
@@ -176,8 +176,8 @@ void 	Ship_ALL_Init(void)
 //    TIM5_Configuration();  //tm32f103vbt6 没有tim5
 //    TIM5_NVIC_Configuration(); //tm32f103vbt6 没有tim5
 
-    TIM4_Configuration();  //tm32f103vbt6 没有tim5，只有1 2 3 4 
-    TIM4_NVIC_Configuration(); //tm32f103vbt6 没有tim5，只有1 2 3 4 
+    TIM4_Configuration();  //tm32f103vbt6 没有tim5，只有1 2 3 4
+    TIM4_NVIC_Configuration(); //tm32f103vbt6 没有tim5，只有1 2 3 4
 
     /* 初始化GPS模块使用的接口（UART2） */
     GPS_Config();		 //缺少器件检测
@@ -421,9 +421,6 @@ void Seek_Route_Check(void)
         respond[6] |= 0x02;
 
         angle_seek = Angle;
-
-
-//	printf("angle_normal = %f angle_seek = %f\r\n",angle_normal,angle_seek );
 
         if(abs(angle_normal  - angle_seek) < 30)
             flag_Seek_Route_Check_Ing = 1;
@@ -860,26 +857,26 @@ void  GPS_Check_in_using(void) //22222222222222222222222222222222222222222222222
         setBeepBlood = BEEPOFF;
         flag_enter_in_mode_wwdg = 1;
         TIM2_GPIO_Deinit();
-			
-				LEDC_OTHER(0);
-				LEDC_ALL(0);
-			
-				GPIO_ResetBits(GPIOD,GPIO_Pin_15);
-				GPIO_ResetBits(GPIOD,GPIO_Pin_14);
-				GPIO_ResetBits(GPIOC,GPIO_Pin_6);
-				GPIO_ResetBits(GPIOC,GPIO_Pin_7);
-			
-				TIM3->CCR3 = 100;	
-				TIM3->CCR4 = 100;
-			
+
+        LEDC_OTHER(0);
+        LEDC_ALL(0);
+
+        GPIO_ResetBits(GPIOD,GPIO_Pin_15);
+        GPIO_ResetBits(GPIOD,GPIO_Pin_14);
+        GPIO_ResetBits(GPIOC,GPIO_Pin_6);
+        GPIO_ResetBits(GPIOC,GPIO_Pin_7);
+
+        TIM3->CCR3 = 100;
+        TIM3->CCR4 = 100;
+
         Oled_Show_GPS_Error();
     }
-	  if(GPS_is_device_up == 0)
-		{
-			  Oled_Show_GPS_Error();
-			GPS_is_device_up = 50;
-		
-		}
+    if(GPS_is_device_up == 0)
+    {
+        Oled_Show_GPS_Error();
+        GPS_is_device_up = 50;
+
+    }
 
 }
 
@@ -914,7 +911,7 @@ void Oled_Show(void)
     else if(flag_refresh_page == 2)
     {
         OLED_ShowString(0,12, "BAT.",12);
-        OLED_ShowNum(30,12,Ship_Board_Data.ship_voltage ,6,12);
+        OLED_ShowNum(30,12,Ship_Board_Data.ship_voltage,6,12);
         OLED_ShowString(0,24, "VER.",12);  //增加oled版本号
         flag_refresh_page = 3;
 
@@ -954,11 +951,11 @@ void Oled_Show(void)
 void Oled_Show(void)
 {
     static int flag_refresh_page = 0;
-	uint32_t BAT_ADC;
+    uint32_t BAT_ADC;
 
-	if(GPS_is_device_up == 50)
-		return;
-	
+    if(GPS_is_device_up == 50)
+        return;
+
     if(flag_refresh_page == 0)
     {
         OLED_ShowString(0,0,"GPS",12);
@@ -979,11 +976,11 @@ void Oled_Show(void)
     }
     else if(flag_refresh_page == 2)
     {
-			
+
         OLED_ShowNum(90,0,(Ship_Board_Data.ship_voltage)/10,2,12);
         OLED_ShowString(102,0,".",12);
-			
-				OLED_ShowNum(106,0,(Ship_Board_Data.ship_voltage)%10,2,12);
+
+        OLED_ShowNum(106,0,(Ship_Board_Data.ship_voltage)%10,2,12);
 
         flag_refresh_page = 3;
 
@@ -1010,13 +1007,13 @@ void Oled_Show(void)
     }
     else if(flag_refresh_page == 5)
     {
-			
+
         OLED_ShowString(0,36,"CA",12);  //第四行
         OLED_ShowNum(24,36,(u32)Angle,6,12);
 
         //第五行 暂时未使用
-				OLED_ShowString(0,48,"B",12);  //第四行
-				OLED_ShowNum(24,48,setBeepBlood,6,12); //显示蜂鸣器此时的数据
+        OLED_ShowString(0,48,"B",12);  //第四行
+        OLED_ShowNum(24,48,setBeepBlood,6,12); //显示蜂鸣器此时的数据
         flag_refresh_page = 0;
     }
 
@@ -1206,12 +1203,12 @@ void Queue_Beep_On(void)
         setBeepBlood = BEEP_ALL_ON_LOW_POWER;
     }
 
-		
-		#ifdef STM32F103VCT6_MCU
+
+#ifdef STM32F103VCT6_MCU
 //					USART_SendData(UART4, setBeepBlood + 0xf0);
 //			while( USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET );
-		#endif
-		
+#endif
+
     last_beep_cmd = setBeepBlood;
 
 }
@@ -1529,7 +1526,7 @@ int AS14B_Get_buff(void)
                 longitude_CH[3] = sure_longitude;
                 dimensionality_CH[3] = sure_dimensionality;
                 respond[6] |= 0x10;//0b00100000;
-      
+
                 break;
 
             case CH4:  //设置终点4
@@ -1538,7 +1535,7 @@ int AS14B_Get_buff(void)
                 longitude_CH[4] = sure_longitude;
                 dimensionality_CH[4] = sure_dimensionality;
                 respond[6] |= 0x08;//0b00010000;
-     
+
                 break;
 
             case GO_CH:
@@ -1552,7 +1549,7 @@ int AS14B_Get_buff(void)
                 uCmd = USHIPGO;
                 setBeepBlood = BCONTROL;
                 key3Cmd = 1;
-            
+
                 break;
             case FEED_BIN_D:
                 //				printf("FEED_BIN_D----------------------------\r\n");
@@ -1828,8 +1825,8 @@ void Control_Led_Toggle(void )
     static 	int RIGHT_led_toggle_time = 0, LEFT_led_toggle_time = 0,   WIDTH_led_toggle_time = 0, ALL_led_toggle_time = 0;
     static 	int flag_RIGHT_led = 0, flag_LEFT_led = 0,   flag_WIDTH_led = 0,flag_ALL_led = 0;
 
-	
-	
+
+
     if(moto_control_led_mode & MOTO_CONTROL_LED_WIDTH)
     {
         if((WIDTH_led_toggle_time++) * 4  > flag_WIDTH_led_toggle_time)
@@ -1839,7 +1836,7 @@ void Control_Led_Toggle(void )
             LEDC2(flag_WIDTH_led);
             WIDTH_led_toggle_time = 0;
         }
-    }else if(moto_control_led_mode & MOTO_CONTROL_LED_RIGHT )
+    } else if(moto_control_led_mode & MOTO_CONTROL_LED_RIGHT )
     {
         if((RIGHT_led_toggle_time++) * 4  > flag_RIGHT_led_toggle_time)
         {
@@ -1850,11 +1847,11 @@ void Control_Led_Toggle(void )
             LEDC5(0);
             LEDC7(0);
             LEDC8(flag_RIGHT_led);
-						LEDC9(0);
+            LEDC9(0);
 
             RIGHT_led_toggle_time = 0;
         }
-    }else if(moto_control_led_mode & MOTO_CONTROL_LED_LEFT)
+    } else if(moto_control_led_mode & MOTO_CONTROL_LED_LEFT)
     {
         if((LEFT_led_toggle_time++) * 4  > flag_LEFT_led_toggle_time)
         {
@@ -1865,10 +1862,10 @@ void Control_Led_Toggle(void )
             LEDC5(flag_LEFT_led);
             LEDC7(flag_LEFT_led);
             LEDC8(0);
-						LEDC9(0);
+            LEDC9(0);
             LEFT_led_toggle_time = 0;
         }
-    }else if(MOTO_CONTROL_LED_STOP == moto_control_led_mode)
+    } else if(MOTO_CONTROL_LED_STOP == moto_control_led_mode)
     {
 
         WIDTH_led_toggle_time = 0;
@@ -1888,20 +1885,20 @@ void Control_Led_Toggle(void )
         }
 
         moto_control_led_mode = MOTO_CONTROL_LED_STAND_BY;
-    }else if((GPS_is_device_up == 50)&&(moto_control_led_mode == MOTO_CONTROL_LED_STAND_BY))
-		{
-			
-			if((ALL_led_toggle_time++) * 4  > flag_ALL_led_toggle_time)
+    } else if((GPS_is_device_up == 50)&&(moto_control_led_mode == MOTO_CONTROL_LED_STAND_BY))
+    {
+
+        if((ALL_led_toggle_time++) * 4  > flag_ALL_led_toggle_time)
         {
             flag_ALL_led = !flag_ALL_led;
-					
-						LEDC_ALL(flag_ALL_led);
-        
+
+            LEDC_ALL(flag_ALL_led);
+
             ALL_led_toggle_time = 0;
         }
-		
-		
-		}
+
+
+    }
 
 }
 
@@ -2062,10 +2059,10 @@ checkFirst:
                     for(a=0; a<11; a++)
                     {
                         AS14B_receive_buf[a] = UART3_CODE[i+1+a+1];
-                      //  printf("-%02x  ",AS14B_receive_buf[a] );
+                        //  printf("-%02x  ",AS14B_receive_buf[a] );
                     }
 
-                   // printf("\r\n");
+                    // printf("\r\n");
                     AS14B_Get_buff(); //无线获取命令及数据
                     i = i+ 11;
                     //----------------------------------------------------------------------------------------------//
@@ -2077,9 +2074,9 @@ checkFirst:
                     for(a=0; a<24; a++)
                     {
                         AS14B_receive_buf[a] = UART3_CODE[i+1+a+1];
-                 //       printf("%02x ",AS14B_receive_buf[a] );
+                        //       printf("%02x ",AS14B_receive_buf[a] );
                     }
-                 //   printf("\r\n");
+                    //   printf("\r\n");
 
                     //					printf("data get ok\r\n");
                     AS14B_Get_buff(); //无线获取命令及数据
@@ -2094,7 +2091,7 @@ checkFirst:
                     {
                         AS14B_receive_buf[a] = UART3_CODE[i+1+a+1];
                     }
-             
+
 
                     state = 100;
                     break;

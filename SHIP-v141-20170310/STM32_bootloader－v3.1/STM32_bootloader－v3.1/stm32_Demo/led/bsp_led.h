@@ -3,7 +3,7 @@
 
 #include "stm32f10x.h"
 
-/** the macro definition to trigger the led on or off 
+/** the macro definition to trigger the led on or off
   * 1 - off
   *0 - on
   */

@@ -7,17 +7,17 @@
 
 // UART1  log  调试打印信息
 
- void USART1_Config(void);
- void  USART1_NVIC_Configuration(void);
- int  fputc(int ch, FILE *f);
- int  fgetc(FILE *f);
+void USART1_Config(void);
+void  USART1_NVIC_Configuration(void);
+int  fputc(int ch, FILE *f);
+int  fgetc(FILE *f);
 
- void bsp_USART1_IRQHandler(void);
- char *get_rebuff(uint8_t *len);
- void clean_rebuff(void);
- 
- 
- 
+void bsp_USART1_IRQHandler(void);
+char *get_rebuff(uint8_t *len);
+void clean_rebuff(void);
+
+
+
 
 void USART1_printf(USART_TypeDef* USARTx, char *Data,...);
 
@@ -57,13 +57,13 @@ void USART4_Config(void);
 
 // rf functions
 
-	void rfUart_SendCMD(u8* Data,u8 len);
-		u8 get_rf_state(void) ;
-		u8 wake_up_rf(void);
-		u8 write_ch_rf(u8 ch);
-		u8 write_address_rf(u8 ad1,u8 ad2);
-		void	RF_CHECK(void);
-		u8 set_rf_to_sleep(void);
-		u8 config_rf_persistent_connection_RX(void);
+void rfUart_SendCMD(u8* Data,u8 len);
+u8 get_rf_state(void) ;
+u8 wake_up_rf(void);
+u8 write_ch_rf(u8 ch);
+u8 write_address_rf(u8 ad1,u8 ad2);
+void	RF_CHECK(void);
+u8 set_rf_to_sleep(void);
+u8 config_rf_persistent_connection_RX(void);
 
 #endif /* __USART1_H */
