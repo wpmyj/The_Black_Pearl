@@ -34,13 +34,13 @@
 
 enum MOTO_TYPE
 {
-MOTO_STOP=0,
-MOTO_GO,
-MOTO_BACK,
-MOTO_RIGHT,
-MOTO_LIGHT,
-MOTO_ROLL_RIGHT,
-MOTO_ROLL_LIGHT
+    MOTO_STOP=0,
+    MOTO_GO,
+    MOTO_BACK,
+    MOTO_RIGHT,
+    MOTO_LIGHT,
+    MOTO_ROLL_RIGHT,
+    MOTO_ROLL_LIGHT
 };
 
 //#define MOTO_STOP 0
@@ -69,16 +69,16 @@ MOTO_ROLL_LIGHT
 
 typedef struct
 {
-		u8 Moto_Right_Control_last_cmd;
-		u8 Moto_Right_Control_now_cmd;
-		u8 Moto_Right_Control_last_pwm;
-		u8 Moto_Right_Control_now_pwm;	
-		u8 Moto_Left_Control_last_cmd;
-		u8 Moto_Left_Control_now_cmd;
-		u8 Moto_Left_Control_last_pwm;
-		u8 Moto_Left_Control_now_pwm;
-	
-}Moto_Change_Cmd_Control_t;
+    u8 Moto_Right_Control_last_cmd;
+    u8 Moto_Right_Control_now_cmd;
+    u8 Moto_Right_Control_last_pwm;
+    u8 Moto_Right_Control_now_pwm;
+    u8 Moto_Left_Control_last_cmd;
+    u8 Moto_Left_Control_now_cmd;
+    u8 Moto_Left_Control_last_pwm;
+    u8 Moto_Left_Control_now_pwm;
+
+} Moto_Change_Cmd_Control_t;
 
 
 void moto_gpio_init(void);

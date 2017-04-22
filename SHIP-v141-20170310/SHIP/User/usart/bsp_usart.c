@@ -96,26 +96,26 @@ void  USART1_NVIC_Configuration(void)
 
 
 
-///重定向c库函数printf到USART1
-int fputc(int ch, FILE *f)
-{
-    /* 发送一个字节数据到USART1 */
-    USART_SendData(USART1, (uint8_t) ch);
+/////重定向c库函数printf到USART1
+//int fputc(int ch, FILE *f)
+//{
+//    /* 发送一个字节数据到USART1 */
+//    USART_SendData(USART1, (uint8_t) ch);
 
-    /* 等待发送完毕 */
-    while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+//    /* 等待发送完毕 */
+//    while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
 
-    return (ch);
-}
+//    return (ch);
+//}
 
-///重定向c库函数scanf到USART1
-int fgetc(FILE *f)
-{
-    /* 等待串口1输入数据 */
-    while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET);
+/////重定向c库函数scanf到USART1
+//int fgetc(FILE *f)
+//{
+//    /* 等待串口1输入数据 */
+//    while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET);
 
-    return (int)USART_ReceiveData(USART1);
-}
+//    return (int)USART_ReceiveData(USART1);
+//}
 
 
 
