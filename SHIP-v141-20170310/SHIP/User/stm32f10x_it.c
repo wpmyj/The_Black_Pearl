@@ -104,7 +104,8 @@ void WWDG_IRQHandler(void)
 //        printf("r=%d",debug_num);
 }
 
-
+ 
+ #ifdef STM32F103VCT6_MCU
 void TIM5_IRQHandler(void)
 {
     if ( TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET )
@@ -113,6 +114,7 @@ void TIM5_IRQHandler(void)
         TIM_ClearITPendingBit(TIM5, TIM_FLAG_Update);
     }
 }
+#endif
 
 void TIM4_IRQHandler(void)
 {

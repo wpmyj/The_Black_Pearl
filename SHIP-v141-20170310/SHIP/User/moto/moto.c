@@ -181,11 +181,11 @@ static void TIM4_Mode_Config_Enab(void)
     TIM_OC4Init(TIM4, &TIM_OCInitStructure);	//使能通道4
     TIM_OC4PreloadConfig(TIM4, TIM_OCPreload_Enable);
 
-
     TIM_ARRPreloadConfig(TIM4, ENABLE);
 
     /* TIM3 enable counter */
     TIM_Cmd(TIM4, ENABLE);
+		
 }
 
 void TIM4_PWM_Init_Enab(void)
@@ -241,12 +241,11 @@ static void Mos_TIM_GPIO_Init(void)
 
 }
 
-#define PWM_frequency    1// khz
+#define PWM_frequency    10 // khz
 static void Mos_TIM_Config_Init(void)
 {
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
     TIM_OCInitTypeDef  TIM_OCInitStructure;
-
 
     /* Time base configuration */
 	

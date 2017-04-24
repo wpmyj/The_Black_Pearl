@@ -729,7 +729,7 @@ void USART4_Config(void)
     USART_Cmd(UART4, ENABLE);
 }
 
-
+#ifdef STM32F103VCT6_MCU
 static void  USART4_NVIC_Configuration(void)
 {
     NVIC_InitTypeDef NVIC_InitStructure;
@@ -743,7 +743,7 @@ static void  USART4_NVIC_Configuration(void)
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 }
-
+#endif
 
 void GY_26_Receive_Init(void)
 {

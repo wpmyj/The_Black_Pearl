@@ -23,6 +23,8 @@
  * 输入  ：无
  * 输出  ：无	
  */
+ 
+ #ifdef STM32F103VCT6_MCU
 void TIM5_NVIC_Configuration(void)
 {
     NVIC_InitTypeDef NVIC_InitStructure; 
@@ -55,6 +57,7 @@ void TIM5_Configuration(void)
     //RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , DISABLE);		/*先关闭等待使用*/    
 }
 
+#endif
 
 
 void TIM4_NVIC_Configuration(void)

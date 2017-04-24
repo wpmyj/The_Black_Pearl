@@ -258,8 +258,8 @@ void 	Ship_stop_enter_normal_Init(void)
 
     uKey_Init();
 
-    TIM5_Configuration();
-    TIM5_NVIC_Configuration();
+//    TIM5_Configuration();
+//    TIM5_NVIC_Configuration();
 
     /* 初始化GPS模块使用的接口（UART2） */
     GPS_Config();		 //缺少器件检测
@@ -932,7 +932,6 @@ void Oled_Show(void)
         OLED_ShowString(0,48,"test",12);
         flag_refresh_page = 5;
     }
-
 
     else if(flag_refresh_page == 5)
     {

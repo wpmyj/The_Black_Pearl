@@ -64,13 +64,13 @@ void USART_Configuration(void)
     USART_Init(USART1, &USART_InitStructure);
 
     /* 若接收数据寄存器满，则产生中断 */
-    USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+//    USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
     /* 第5步：使能 USART1， 配置完毕 */
     USART_Cmd(USART1, ENABLE);
 
     /* 如下语句解决第1个字节无法正确发送出去的问题 */
-    USART_ClearFlag(USART1, USART_FLAG_TC);     // 清标志
+//    USART_ClearFlag(USART1, USART_FLAG_TC);     // 清标志
 }
 
 /*******************************************************************/

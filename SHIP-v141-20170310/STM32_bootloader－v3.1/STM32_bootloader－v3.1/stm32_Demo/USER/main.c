@@ -206,7 +206,16 @@ f_open_again:
 
         while(1);
 exit_fail:
-        LED1_OFF;
+				
+				LED1_OFF;
+				Delay(0Xfffff);
+				LED1_ON;
+				Delay(0Xfffff);
+				LED1_OFF;
+				Delay(0Xfffff);
+				LED1_ON;
+				Delay(0Xfffff);
+				LED1_OFF;
 
         printf("\r\n iap_load_app ! update fail \r\n");
         iap_load_app(FLASH_APP_ADDR);

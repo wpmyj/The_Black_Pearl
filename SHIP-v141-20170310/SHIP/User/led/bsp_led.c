@@ -67,13 +67,11 @@ void sysInitIndictor(void)
 		Delay_ms(30);
 		LED2_ON;
 		Delay_ms(30);
-		P_LED1_ON;
+
+	
+		LED1_OFF;
 		Delay_ms(30);
-		P_LED2_ON;
-		Delay_ms(30);
-		P_LED3_ON;
-		Delay_ms(30);
-		P_LED4_ON;
+		LED2_OFF;
 		Delay_ms(30);
 
 }
