@@ -1,5 +1,6 @@
 
 /******************************************		new verion		************************************************/
+本版本更改相关.s启动文件，故而可能存在异常，不要做download使用，特此声明
 
 version 142
 (data:2017/04/20)
@@ -19,39 +20,39 @@ version 142
 /*****************************************************************************************************************************************************************/
 /*****************************************************************************************************************************************************************/
 
-�������git:
+代码更新git:
 
 https://github.com/freelinli/The_Black_Pearl
 
 
-1 	keilkill.bat	Ϊwindows�������м��ļ��Ľű���
-	keilkill.sh 	Ϊlinux��mac�������м��ļ��Ľű�
+1 	keilkill.bat	为windows下清理中间文件的脚本。
+	keilkill.sh 	为linux及mac下清理中间文件的脚本
 	
-2  	BootLoader��������˵����
-		secret.c�У�CRCIDΪstm32�����кš��ڼ���״̬�£���Ҫ�������к����ӵ����У������޷�����������
-		secret.c�У�#define  FLASH_START_ADDR 0x801f000 �ǽ��������д��ָ����ַ�����к�Ӧ�ó���ƥ�䣬�������Ⱥ�˳��
-		secret.c�У� f_open(&fdst,"0:/TEST.bin",FA_OPEN_EXISTING|FA_READ); �ļ������ģ��滻TEST.bin���ɡ�
+2  	BootLoader引导程序说明：
+		secret.c中，CRCID为stm32的序列号。在加密状态下，需要将其序列号增加到其中，否则无法正常工作。
+		secret.c中，#define  FLASH_START_ADDR 0x801f000 是将相关数据写到指定地址，进行和应用程序匹配，两者是先后顺序。
+		secret.c中， f_open(&fdst,"0:/TEST.bin",FA_OPEN_EXISTING|FA_READ); 文件名更改，替换TEST.bin即可。
 		
-		iap.h�У�#define  FLASH_APP_ADDR		0x08008000	Ӧ�ó������ת��ַ���ɸ�����Ҫ�����޸ġ��˴��޸ģ���Ӧ�ó��������Ҳ��Ҫ���ġ�
+		iap.h中，#define  FLASH_APP_ADDR		0x08008000	应用程序的跳转地址，可根据需要进行修改。此处修改，则应用程序的设置也需要更改。
 		
-		usart1.c�У�Ŀǰprintf�����Ȼ����USART1����Ҫ��Ӧ�ó���ͳһ�Ļ����ɸ���Ϊuart4���޸ĺ궨�弴�ɡ�//#define USART1_PRINTF
-					usart1 ������ 115200; uart4 ������ 9600;(uart4 ֻ�Ǽ򵥲��Կ������������������δ�⣬���ǲ��ã�ȷ����ȫ���ڲ���һ��)
+		usart1.c中，目前printf输出依然采用USART1。需要和应用程序统一的话，可更改为uart4。修改宏定义即可。//#define USART1_PRINTF
+					usart1 波特率 115200; uart4 波特率 9600;(uart4 只是简单测试可输出，均正常，整体未测，若是采用，确保安全，在测试一次)
 					
 
-3 	shipӦ�ó���˵����
-		�������BootLoader�е�FLASH_APP_ADDR���壬����Ҫ����������
-					system_stm32f10x.c�У�#define VECT_TAB_OFFSET 0x08008000
-					option �У�targetѡ�IROM1��start��дVECT_TAB_OFFSET��ַ��������дmcu���ܿռ��ַ-VECT_TAB_OFFSET
-		option�е� c/c++ѡ��������ã�,STM32F103VCT6_MCU����ѡ���Ƿ�ΪVCϵ�С�ȥ�������VBT6��VCϵ�п����uart4��VB�޷�uart4�������ʽ�汾��Ӧ��VB�汾��
-	��	
-		����hex�ļ���option�е� userѡ���������Run #1:  C:\Keil_v5\ARM\ARMCC\bin\fromelf.exe --bin -o  .\TEST.bin  .\Objects\SHIP.axf
+3 	ship应用程序说明：
+		如果更改BootLoader中的FLASH_APP_ADDR定义，则需要更改两处：
+					system_stm32f10x.c中，#define VECT_TAB_OFFSET 0x08008000
+					option 中，target选项，IROM1，start填写VECT_TAB_OFFSET地址，后者填写mcu的总空间地址-VECT_TAB_OFFSET
+		option中的 c/c++选项进行配置，,STM32F103VCT6_MCU，来选择是否为VC系列。去除则兼容VBT6。VC系列可输出uart4，VB无法uart4输出。正式版本，应用VB版本。
+	牋	
+		生成hex文件：option中的 user选项进行配置Run #1:  C:\Keil_v5\ARM\ARMCC\bin\fromelf.exe --bin -o  .\TEST.bin  .\Objects\SHIP.axf
 
 
 		
 
 
-����keil�� all style �����ʹ�÷���:
-�ο����ͣ�http://www.cnblogs.com/yb1991/articles/4600642.html
+辅：keil中 all style 插件的使用方法:
+参考博客：http://www.cnblogs.com/yb1991/articles/4600642.html
 
 /*****************************************************************************************************************************************************************/
 /*****************************************************************************************************************************************************************/
@@ -75,140 +76,140 @@ version 141
 141 0411
 
 
-1 ���ڳ���beep��Ե�������������⣬��ʱδ�ҵ����ԭ������ʾ������ʾbeep��Ϣ�����ڴ�ӡbeep��switch���ݡ��͵�����ʱ����������
-	�����ҵ�9.�����󣬾��찴ң�ص�ledȫ�������ᵼ�¸��������Բ�ˬ.
-	�Ѵ�����Ӧ�ò����ٳ������⡣
+1 对于出现beep无缘无响起来的问题，暂时未找到相关原因。在显示屏上显示beep信息。串口打印beep的switch数据。低电量暂时不做处理。
+	错误找到9.开机后，尽快按遥控的led全开键，会导致该现象。屡试不爽.
+	已处理，应该不会再出现问题。
 	
 
-2 uart4 ��Ϊ���ڡ���option�е� c/c++ѡ��������ã�,STM32F103VCT6_MCU����ѡ���Ƿ�ΪVCϵ�С�ȥ�������VBT6.
-		ע�⣬һ��Ҫ����,STM32F103VCT6_MCU��˵��
+2 uart4 改为串口。在option中的 c/c++选项进行配置，,STM32F103VCT6_MCU，来选择是否为VC系列。去除则兼容VBT6.
+		注意，一定要增加,STM32F103VCT6_MCU的说明
 
 
 
 141 0327
 
-�޸�оƬΪstm32f103vbt6
-��֮ǰ 256k��Ϊ�� 128K
+修改芯片为stm32f103vbt6
+由之前 256k改为了 128K
 
-�����ص�ַ��Ҫ���и��ģ�
+因此相关地址需要进行更改：
 
-0- 0x7fff ռ��1/4
+0- 0x7fff 占据1/4
 
 0x7fff  - 0xfffe  1/4
 
-ʣ�ಿ�ֵ� 1ffff ʣ��1��2
+剩余部分到 1ffff 剩余1／2
 
 
-bootloader��app֮��Ķ�д�����ַ��Ҫ����
+bootloader与app之间的读写密码地址需要更改
 
-�����ң����ip��Ҫ�洢��ַ�޸�
+船体的遥控器ip需要存储地址修改
 
-��ת��ַ��Ҫ���ģ�0x8000��Ҳ����0x8008000����СΪ0x18000��
+跳转地址需要整改，0x8000，也即是0x8008000，大小为0x18000。
 
-stm32f103vbt6 ��ʱ��ֻ��4·������ֻ����·��
+stm32f103vbt6 定时器只有4路，串口只有三路。
 
-tim5��Ϊtim4
-uart4��Ϊuart1
-ȥ�����ڵĹ��ܣ��Ժ�ֻ��debug�ˡ�
+tim5改为tim4
+uart4改为uart1
+去除串口的功能，以后只能debug了。
 
 
 141 0308
 
-ȷ�ϵ�ѹ������⣬��Ҫ�Ƕ����ܵ�ͨ��ѹ�Լ�mos��ͨ�����ĵ�ѹ���١�ʵ���ϵĲ���ֵ���ǱȽ϶�Ӧ�ġ�
-�޸ĳ�ʼ��Ĭ����ֵΪ168��16.8V��
+确认电压检测问题，主要是二极管导通电压以及mos导通带来的电压减少。实际上的测量值还是比较对应的。
+修改初始化默认数值为168，16.8V。
 
-����¶ȼ�⴫�����������¶��Ƿ������������Ϊ������ʵ�ʲ���Ϊǻ���¶ȡ�
+检查温度检测传感器，测量温度是否正常。检测结果为正常。实际测试为腔体温度。
 
 
 141 0305
 
-����gps�쳣����Ȼ���Կ��ơ�
+更改gps异常后，依然可以控制。
 
-��gps�쳣�󣬹ر�һ��led��moto�����������ܹ��������ơ�led toggle��
+在gps异常后，关闭一次led和moto及其他，且能够正常控制。led toggle。
 
 
-�ڹ켣�����У�����ֵεεε���������Ҫ�ҵ�������д�������ʱδ�ҵ�ԭ��Ҳδ�ܸ��֡�
+在轨迹导航中，会出现滴滴滴的声音。需要找到问题进行处理。暂时未找到原因，也未能复现。
 
-��������״̬����Ҫ�����������յ��������� ң�����Ѿ������޸ġ�
-	��Ӧң�������յ����������󣬲�Ӧ�÷���ֹͣ���
+船体运行状态，需要可以正常接收导航结束。 遥控器已经做了修改。
+	对应遥控器接收到导航结束后，不应该发送停止命令。
 
 
 //
 
-140�汾
+140版本
 
--1 �����д���360��ʱ��ԭ����ת�����⡣ 
-	�������Կ��ǣ��������ڱȽϷ���Щ��ȡ��90����ת����������ת�������г��ԡ�
-	�Ż��жϣ�360�ȸ��������ַ�ʽ��
+-1 更改有存在360度时候，原地旋转的问题。 
+	经过测试考虑，比例调节比较方便些。取消90度旋转，进行左右转操作进行尝试。
+	优化判断，360度附近的两种方式。
 	
--2 �����ڵ��������У�����rf��ʧ�źţ�Ӧ��ֹͣ�󣬷�������㣬�����������趨�������·����ok
--3 ������ת�Ƕ�Ϊ90�ȡ� // ����ȥ�����ܡ��Ѿ�ȥ����ok
-4 ����������ת����ĽǶ����ݡ������ҽǶȲ�ֵ�����ʱ��������ת�Ƕ�С�ķ���//��ͬ��1 1�ĸ�����ϣ�4��ӦҲ���ĺ��ˡ���ԭ���Ѿ��ĺõĳ���
-	�������������Ƚ��ڲ�������ٿ��Ǹ���Ϊ����ԭ����ת��
+-2 更改在导航过程中，出现rf丢失信号，应该停止后，返航到起点，而放弃到达设定导航点的路径。ok
+-3 更改旋转角度为90度。 // 考虑去除功能。已经去除。ok
+4 更改左右旋转方向的角度依据。当左右角度差值相差多的时候，优先旋转角度小的方向。//雷同与1 1的更改完毕，4相应也更改好了。。原本已经改好的程序。
+	考虑在两个弧度角内部计算后，再考虑更改为左右原地旋转。
 
-5 ���ӵ�������������⡣//�Ѿ����� ��ʱ�����ڵ�ѹλ�ã�Ϊ��������ֵ*1000.
+5 增加电流检测的相关问题。//已经更改 暂时放置在电压位置，为两电流数值*1000.
 
-6 compassģ��ż����������Ϊ0. //������
+6 compass模块偶尔返回数据为0. //待考究
 
-7 gps�޷�׼ȷ�͸ߵµ�ͼ����һ�¡��ٴν��в��ԡ�
+7 gps无法准确和高德地图保持一致。再次进行测试。
 
-8 �����p�����£���Ӧ�ٶ���΢���ڶٴ�С���Ҫ���п��Ǹ�����ز����������Ǹ��ĽǶȷ�Χ��Ӧ�ñ�5��СһЩ��
-	��ʱ�����޸ġ�
-
-
-
-
-������- 3��1��
-
-��Ҫ����һ����صĲ���ϵͳ����freertos��
-
-
-
-139�汾 2017 0222
-
-����������ش���
-����gps���⣬��������ddmm.mmmm����Ϊdddd.dddd��ʽ��
-
-138�汾 2017 0219
-
-1 �������ӱ�������gpsģ��Ĺ���
-	�Ѿ��޸Ľ���������ͨ����
-˵����
-	ֻ���ԭʼ��ģ�飬���ϼ����á�ԭʼģ��δ����������ã�������Ӧ��Ϊ9600��������6M��M7���Կ��ã�δ������ԡ�m8�ݲ����á���װֻ����6m��
-2 ����ǰ�����л���ǰ�������޷��ر�ת��Ƶ����⡣	
-
-137�汾 2017 0218
-
-1 ң�ط�����ʱ�����ǽ����ֶ�����ģʽ����Ҫ�����˳��Զ�����ģʽ���ȴ�ң�ؽ�����Ȼ���ٽ����Զ�ģ�顣
-2 ������ʱ������Ƕ���ֵ����30�ȣ���ԭ��ת�䡣���ת��뾶��������⡣
-3 ǰ�����̾�����ֱ�ߣ�ͨ���ṹ�޸ģ���ʱ����������ġ����Ǻ��ڸ�����Ҫ�������compassʵʱУ׼����΢�鷳��
-4 oled��ʾ���ݿͻ�������и��ġ�// #define DEBUG_GPS �л�����ģʽ�Ϳͻ�����ģʽ
-5 �͵����������ģ�����Ϊһ����
-6 �ͻ�����ң�������򿪹�ת�����鲻�ѣ�Ҫ��ҡ�˸�Ӧ��Χ���������в��ԣ��ٿ��ǡ�
-		�Ѿ���������޸ģ���Ҫʵ�ʲ��ԡ�20170220�Ѿ�����ͨ����
-7 ÿ��beep���ͣ�Ҫ���һ�����ڣ����ܳ��ȼ�Ͻ��档
-
-
-
-137�汾 2017 0216
-
-�Ľ��µ�pcb
-Ӧ�ͻ���������β�Ƶ���˸��
-
-
-136�汾 2017 0116
-
-�޸�ԭ��ת�䣬ָʾ�Ʋ��������⡣
-����δ�����εĿ��ȹ���
+8 电机在p调节下，反应速度稍微存在顿挫感。需要进行考虑更改相关参数。或者是更改角度范围，应该比5再小一些？
+	暂时不做修改。
 
 
 
 
+接下来- 3月1号
 
-136�汾 2017 0112
+需要增加一个相关的操作系统，如freertos。
 
-1 ���߶Ͽ���ʱ�򣬷������ٴν��붪ʧgps��������εεε��졣����Ϊcontrol��beep����ΪsetBeepBlood = 2����Ҫȥ�����λ�ã��ѽ����
-2 ���ݿͻ����󣬸�������״̬Ϊԭ�ش�ת�������ɲ�ͬ���ٶ��ļ���
+
+
+139版本 2017 0222
+
+增加蓝牙相关代码
+更改gps问题，将数据总ddmm.mmmm更改为dddd.dddd格式。
+
+138版本 2017 0219
+
+1 尝试增加本机配置gps模块的功能
+	已经修改结束，测试通过。
+说明：
+	只针对原始的模块，插上即可用。原始模块未进行相关配置，波特率应该为9600。（兼容6M。M7测试可用，未深入测试。m8暂不可用。安装只是用6m）
+2 修正前左右切换到前进方向，无法关闭转向灯的问题。	
+
+137版本 2017 0218
+
+1 遥控返航的时候，若是进入手动控制模式，需要先行退出自动导航模式，等待遥控结束，然后再进入自动模块。
+2 返航的时候，如果角度数值大于30度，则原地转弯。解决转弯半径过大的问题。
+3 前进过程尽量走直线，通过结构修改，暂时不做深入更改。若是后期更改需要增加相关compass实时校准。稍微麻烦。
+4 oled显示根据客户需求进行更改。// #define DEBUG_GPS 切换调试模式和客户定义模式
+5 低电量声音更改，更改为一声。
+6 客户需求“遥控器方向开关转弯体验不佳（要测摇杆感应范围）”：先行测试，再考虑。
+		已经进行相关修改，需要实际测试。20170220已经测试通过。
+7 每个beep类型，要完成一个周期，不能出先间断交替。
+
+
+
+137版本 2017 0216
+
+改进新的pcb
+应客户需求，增加尾灯的闪烁。
+
+
+136版本 2017 0116
+
+修改原地转弯，指示灯不亮的问题。
+增加未打开屏蔽的看萌狗。
+
+
+
+
+
+136版本 2017 0112
+
+1 无线断开的时候，返航，再次进入丢失gps，会持续滴滴滴滴响。后发现为control的beep。即为setBeepBlood = 2，需要去除相关位置，已解决。
+2 根据客户需求，更改左右状态为原地打转。并生成不同的速度文件。
 
 			if((AS14B_receive_buf[6]  >= BAR_CENTER_POSITION_MIN )&&(AS14B_receive_buf[6]  <= BAR_CENTER_POSITION_MAX ))  // 3:00
 							Moto_Direction_Turn( MOTO_RIGHT,  100, 0); 
@@ -217,117 +218,117 @@ uart4��Ϊuart1
 
 
 
-3 ���ݿͻ�����������led�ƣ����˶��е������������ȷ��ʵ�ʻ�����Ҫ��������Ҳ�Ƶ���˸��ʵ���ϲ��Ϊ��һ��ģ��ݲ��޸ġ�
+3 根据客户反馈，测试led灯，在运动中的情况。左右正确。实际还是需要增加左侧右侧灯的闪烁，实际上侧灯为连一起的，暂不修改。
 
 
-135�汾 2017 0103
+135版本 2017 0103
 
-1 ����������ʱ�����������ʱ�򣬽�beep��������Ϊ0.
-2 ���������У��Ƕ�ת����30�����ڣ����ٽ���led����˸��
-3 �޸��˿���distant�����쳣�����⡣
-4 ����һ����־����ʾ������������ң�ضν���Э����������ܶ�Ӧ����������ֹͣ�����⡣
-5 adc��ⲻ��Ӧ�������쳣���Ѿ��޸Ķ�Ӧ����Ϊ200k������ܸ���������
-6 ���й����У�����compass��gps���жϡ����һЩ�쳣״̬�����⡣
-7  ====>  ���պ���������ֽ�����󣬻��߽��մ��󡣵����޷����Ƶ�����? ===��?
-
-
-
-
-134�汾 1231
-
-1 �޸�moto�����ٵ�0���жϣ�����Ҫ+����100�ġ��жϴ����Ѿ�������
-2 �ݽ��ٶȣ���ѡ���޸Ķ�Ӧ�궨�塣
+1 蜂鸣器控制时候，在新命令到来时候，将beep屏蔽设置为0.
+2 返航过程中，角度转移在30度以内，不再进行led的闪烁。
+3 修改了开机distant距离异常的问题。
+4 增加一个标志，提示导航结束。与遥控段进行协调处理，规避对应导航过程中停止的问题。
+5 adc检测不对应，出现异常。已经修改对应电阻为200k。检测能更加清晰。
+6 运行过程中，进行compass，gps的判断。规避一些异常状态的问题。
+7  ====>  接收函数，会出现解码错误，或者接收错误。导致无法控制的现象? ===》?
 
 
 
-134�汾 1230
+
+134版本 1231
+
+1 修改moto。减速到0的判断，是需要+数到100的。判断错误。已经修正。
+2 递进速度，可选，修改对应宏定义。
 
 
-1. �Զ�У׼���޸�bug��else if(cmd == 0).
-2. �������״̬�£��ı���״̬����£���ʱ���ɼ�adc��ѹֵ��100ms��
-3. ˲��ǰ�����ҵ��˶����ᵼ�����ݶ�ʧ����Ҫ�����
+
+134版本 1230
+
+
+1. 自动校准，修改bug。else if(cmd == 0).
+2. 开电机的状态下，改变电机状态情况下，暂时不采集adc电压值。100ms。
+3. 瞬间前后左右的运动，会导致数据丢失。需要解决。
 			 if((AS14B_receive_buf[6]  <= BAR_CENTER_POSITION_MIN)&&(AS14B_receive_buf[6]  >= 0) )
-4. ����gps�������쳣ԭ��
-		a �Ӵ���rx tx
-		b ���������ô���
-		c gps���ö�Ӧģʽ����gps��ʽ������gps��������������
-		d ģ����
-		e �ϵ��쳣
-		f ����
-5 ���ת������ƽ����ʽ���ԣ��������ط��ȡ�5ms�ı�10��pwmλ������������Ҫ50ms����ߵ�������߳�����Ҫ100ms��
+4. 测试gps检测出现异常原因：
+		a 接错了rx tx
+		b 波特率设置错误
+		c gps设置对应模式错误，gps方式，不是gps及北斗及其他。
+		d 模块损坏
+		e 上电异常
+		f 其他
+5 电机转动，以平滑方式测试，发现严重发热。5ms改变10个pwm位，整个过程需要50ms。最高到反向最高持续需要100ms。
 
-6 �޸��°汾Э�顣������ 1230��
-
-
-133�汾 1226
-
-1 �ع�����
-2 �޸��˵εεΣ��͵εν�������⡣
-3 �޸��������޷�׼ȷ�ж�compass״̬�����⡣ >=0x30
-4 ������������λ���⣬��ʱδ�鿴������ʱ���ã��ȴ��ٴη�����
-5 �޸����Э����롣
-6 ����gps���㣬
-7 ������Э��04�������������ݣ���ʱ�޸Ļ�ȥ��С�����¼���Ҳ��Ҫȥ��ܡ�
-8 ����heatbeats++�������ӵ�3������������Ķ��ĺá���ʱ���ټ�⡣
-9 GPS���ݷ��͹�ȥ�������ʧ�ܣ����Խ���app�����жϺʹ����ˡ�
-10 ���ӶԶ��ǣ���gps����rf��������Ĵ�����check_star_and_beep�н������ѡ�����Ҫ����
-
-��㼰���������λ�ã���Ҫ�����жϺͲ��ԡ�
+6 修改新版本协议。已增加 1230。
 
 
-�ع���أ�
- ����ϲ������á���UART�ࡣ
- �����ϲ����������������Ƶĺ����������Ĵ��η�ʽ��
- �ṹ���������������ҪΪ������Ϣ����������Ϊ���������c�ļ�����
- ��������޸ĵĲ��֣����ú궨��ķ�ʽ�������޸ĺ���ֲ��
- �������������շ���������
- ��ʹ��ö�ٵĵط������������ú궨�塣
- beep�ķ�װ�����ԸĶ�Ϊ���ȼ���ʽ�������Ⱥ����ʽ��
- ȥ����ز�����Ҫ�Ĵ��롣5883 l298n cc1101
+133版本 1226
+
+1 重构代码
+2 修改了滴滴滴，和滴滴交叉的问题。
+3 修复开机后，无法准确判断compass状态的问题。 >=0x30
+4 反馈的重启复位问题，暂时未查看到。暂时搁置，等待再次反馈。
+5 修改相关协议代码。
+6 增加gps钓点，
+7 新增加协议04，后干扰配对数据，暂时修改回去。小概率事件，也需要去规避。
+8 出现heatbeats++导致增加到3的情况，后来改动改好。抽时间再检测。
+9 GPS数据发送过去，解码会失败，可以交给app进行判断和处理了。
+10 增加对丢星，丢gps，丢rf三种情况的处理。check_star_and_beep中进行提醒。还需要测试
+
+起点及各个钓点的位置，需要进行判断和测试。
 
 
+重构相关：
+ 代码合并，复用。如UART类。
+ 函数合并，整理。对于类似的函数进行整改传参方式。
+ 结构体对外进行输出。主要为船体信息及其他，作为整体和其他c文件交互
+ 相关容易修改的部分，采用宏定义的方式，方便修改和移植。
+ 函数命名采用驼峰命名法。
+ 能使用枚举的地方，尽量不适用宏定义。
+ beep的封装，可以改动为优先级方式，或者先后次序方式。
+ 去除相关不再需要的代码。5883 l298n cc1101
 
 
 
-1206  132�汾
 
-1 ���ݽӿ�����������	LEDC_ALL(1);	LEDC_ALL(0);	ʵ��ң�ؿ���ledȫ����ȫ��
-2 ��oled����ע�ʹ򿪡��������޸Ĵ��룬ʹˢ�¾��ֵ�ÿ�������С�������Ҫ���ԣ��Ƿ񳬹����Ź�ʱ�䡣oled����������ʾ��������Զ�����룬��ɡ�
-3 ���Ӱ汾��ʾ��Ŀǰ�� 132��Ϊ�汾�š�
-4 led���ݴ����˶�������صĿ��ƣ�����Ӧ���Ѿ����á��������⣬�����ʵ����ġ�
-5 ����gps���ݵĴ����Է�װ����Ҫ���޸ġ�Post_GPS_Data(); // ���汾��ʱ������һ�����ơ�
-6 beep�����ĸ��ģ��Ѳ��ġ��ʵ����ģ���ȷ�����Դ���ִ��Ϊ׼��
+
+1206  132版本
+
+1 根据接口需求，增加了	LEDC_ALL(1);	LEDC_ALL(0);	实现遥控控制led全亮，全灭。
+2 将oled代码注释打开。并尝试修改代码，使刷新均分到每个周期中。具体需要测试，是否超过看门狗时间。oled开机故障显示添加相关自定义代码，完成。
+3 增加版本显示，目前以 132作为版本号。
+4 led根据船的运动进行相关的控制，代码应该已经做好。如有问题，可以适当更改。
+5 发送gps数据的代码以封装。需要简单修改。Post_GPS_Data(); // 本版本暂时不做进一步完善。
+6 beep声音的更改，已查阅。适当更改，已确定。以代码执行为准。
 
 
 1106  131
 
 
-���˺ܶ����
-��Ҫ���޸����ߣ������Э�顣
+改了很多程序。
+主要是修改无线，及相关协议。
 
-����Ҫ�޸ģ��͹��Ļ��Ѻ�����������
+仍需要修改，低功耗唤醒后正常工作。
 
-�¸��汾��Ҫ������
+下个版本需要做到：
 
-���������ط����ơ�
-ԭ�켣�����ĳ����װ��
+无线数据重发机制。
+原轨迹返航的程序封装。
 
 
 1016  124 
 
-�����°汾�����޸�
+根据新版本进行修改
 
-1 ���ӻ�ȡң�ص�ַ
-	AS14B_Get_ADDR();  // 1sʱ�����ڻ�ȡ��ַ
+1 增加获取遥控地址
+	AS14B_Get_ADDR();  // 1s时间用于获取地址
 	
 	
 
-2 ���ӷ������յ������������Ӧ��
+2 增加反馈接收到命令及心跳的响应：
 
 void Respond_Back(void)
-�����������Ҫ���
+具体参数还需要填充
 
-3 ������ص�ָ��ĺ��壬���廹��Ҫϸ����ȷ��
+3 更改相关的指令的含义，具体还需要细化和确认
 
 
 
@@ -336,66 +337,66 @@ void Respond_Back(void)
 #define FEED_BIN_B  4
 #define FEED_BIN_A  3
 #define FISH_HOOK 2 
-#define JOY_STICK 1 //���⣿ 
+#define JOY_STICK 1 //何意？ 
 
 #define START_GPS 7
 #define CH1 8
 #define CH2 9
 #define CH3 10
 #define CH4 11
-#define GO_SET 12  //   ����
+#define GO_SET 12  //   返航
 #define GAMPASS 13
 #define HEAD_TAIL_LIGHT 14
 #define WITH_LIGHT 15
 #define ALL_LIGHT 16
 
 
-// ���� ��ȷ��
+// 待续 待确定
 #define AUTO_GO 17
 //#define GO_SET 18
-#define GO_BACK_BY_TAIL 18 //Բ�켣����
+#define GO_BACK_BY_TAIL 18 //圆轨迹返航
 
 #define GO_BACK 21
 
-4 ���ص��������õ��������Ҫ����ϸ���͸��ġ�
+4 返回到钓鱼设置点的流程需要具体细化和更改。
 
 
 0906 122
-�ٴ���������
-ɾ��������Ҫ���ĵ���������ص�c,h�ļ���
+再次整理资料
+删除不再需要的文档，增加相关的c,h文件。
 
 
 
 
 
 0905
-������ʽ
+整理格式
 
 0904
 121 
-�޸������¶���ֵ������⡣
+修复出现温度数值差的问题。
 
 
 0903 
- 120 ���ӱ��ص�ѹջ�����������޸��Զ� ����linkstack.c
+ 120 增加本地的压栈操作。尝试修改自动 增加linkstack.c
 
 
  
-  ����GPSʵʱλ�÷��ʹ��롣 10s����һ�Ρ�
+  增加GPS实时位置发送代码。 10s发送一次。
 
-  ���Ӽ��ܵĳ�������secret.c
+  增加加密的程序处理。secret.c
   
   
   
   
   
-void Go_Back_By_Trail(void) // ע�ⵥλ��ת��
+void Go_Back_By_Trail(void) // 注意单位的转换
 {
 	double distant_by_trail;
 	static double tail_dimensionality = 0, tail_longitude = 0;
 	
 	
-		if(flag_go_back_by_trail == 1) //ң�����յ�����֮�󣬸ı��־λ
+		if(flag_go_back_by_trail == 1) //遥控器收到数据之后，改变标志位
 		{
 	//	 (new_dimensionality, new_longitude, old_dimensionality, old_longitude);
 		
@@ -413,7 +414,7 @@ void Go_Back_By_Trail(void) // ע�ⵥλ��ת��
 		}
 		else
 		{
-			if(RefreshCnt>50) // �ж��Ƿ�200ms������һ���ж��Ƿ񵽴�������
+			if(RefreshCnt>50) // 判断是否200ms，进行一次判断是否到达间隔距离
 			{
 				distant_by_trail  = get_distance(tail_dimensionality,tail_longitude ,sure_dimensionality,sure_longitude);
 				if(distant_by_trail > 3)
@@ -471,33 +472,33 @@ void Go_Back_By_Trail(void) // ע�ⵥλ��ת��
   
  
 0809
- 119 �汾
+ 119 版本
 
 
 0809
- 118 �汾
+ 118 版本
 
 
 
-��ʾ�¶�
+显示温度
 
-����led��֮ǰ��led���������ϵĸ��š���ʱ����.
+发现led和之前的led存在配置上的干扰。暂时屏蔽.
 
 #define LL_LED1_OFF		//	digitalHi(GPIOB,GPIO_Pin_1)
 #define LL_LED1_ON		//	digitalLo(GPIOB,GPIO_Pin_1)
 
 
-�����������������ˣ�������һ�ᡣ
+快速排序的升降序错了，耽误了一会。
 
 
 0808
- 117 �汾
+ 117 版本
  
- �������͵Ĵ����޸ġ�
- ������ʾ�������ܹ�����������
+ 将米字型的代码修改。
+ 测试显示正常，能够正常工作。
  
  
- ���ձ��˴�������д�Ĵ��룺
+ 仿照别人船的现象写的代码：
  
 #define BAR_CENTER_POSITION_MAX 55  //0x32   max 102  min 0
 #define BAR_CENTER_POSITION_MIN 45  //0x34   max 102 min 0
@@ -505,7 +506,7 @@ void Go_Back_By_Trail(void) // ע�ⵥλ��ת��
 					if(	(AS14B_receive_buf[6]  <= BAR_CENTER_POSITION_MAX) &&
 						(AS14B_receive_buf[6]  >= BAR_CENTER_POSITION_MIN) &&
 						(AS14B_receive_buf[7]  <= BAR_CENTER_POSITION_MAX) &&
-						(AS14B_receive_buf[7]  >= BAR_CENTER_POSITION_MIN))//��������
+						(AS14B_receive_buf[7]  >= BAR_CENTER_POSITION_MIN))//螺旋不动
 					{
 						Moto_Direction_Turn( MOTO_STOP, 0, 0);
 					}
@@ -528,15 +529,15 @@ void Go_Back_By_Trail(void) // ע�ⵥλ��ת��
 
 
 0808
- 116 �汾
- ������ʧ֮����Ҫ�Զ��ܹ�������
- ���������Ƽ��ϲ֣��㹳��ָ����ơ�
+ 116 版本
+ 心跳丢失之后，需要自动能够返航。
+ 增加其他灯及料仓，鱼钩的指令控制。
 
 
 0807
-115�汾
+115版本
 
-����δ������㣬���Կ�����һ��Ѱ����λ����Ϊһ����ѹ��ֵ����Ҫ�ٲ��ԡ�
+若是未设置起点，则以开机第一次寻到的位置作为一个电压数值。需要再测试。
 
 0807 
 
@@ -548,18 +549,18 @@ void Go_Back_By_Trail(void) // ע�ⵥλ��ת��
 
 
 
-114�汾
+114版本
 
 
 
-����δ���������յ㣬���޷����յ㼰��㷽��ǰ����
+若是未设置起点和终点，则无法向终点及起点方向前进。
 
-���δ�����������յ㣬�׻ش��󣬲�������
+如果未设置起点或者终点，抛回错误，并不动。
 
-�޷������������Զ�������
+无法接收心跳则自动返航。
 
 
-else{ //һֱδ���յ����ݡ�
+else{ //一直未接收到数据。
 		if(flag_heart_beart -- < -5000)
 		{
 						uCmd = USHIPGO;
@@ -570,7 +571,7 @@ else{ //һֱδ���յ����ݡ�
 //					Moto_Direction_Turn( MOTO_STOP, 0, 0);
 		}
 
-�޸��������޷�ֹͣ��״̬
+修复导航下无法停止的状态
 							if(AS14B_receive_buf[8] == 1)
 				{
 						Moto_Direction_Turn( MOTO_STOP, 0, 0);
@@ -578,29 +579,29 @@ else{ //һֱδ���յ����ݡ�
 //						printf("stop---------\r\n");
 				}
 
-�޸�Ϊ�µ�ң�ؿ��Ʒ�ʽ
+修改为新的遥控控制方式
 
-���ݱ��˵Ĵ�������״̬���޸ı���������ģʽ���ĸ���λ���ٶȿɵ���
+根据别人的船的运行状态，修改本机的运行模式，四个档位，速度可调。
 
-����Ϊɾ����λ�ã����Ǵ���bug�ģ���
-					if((AS14B_receive_buf[6]  <= BAR_CENTER_POSITION_MAX) &&((AS14B_receive_buf[7]  >= BAR_CENTER_POSITION_MIN)))//��������
+以下为删除的位置（还是存在bug的！）
+					if((AS14B_receive_buf[6]  <= BAR_CENTER_POSITION_MAX) &&((AS14B_receive_buf[7]  >= BAR_CENTER_POSITION_MIN)))//螺旋不动
 					{
 					
 					}
-						else if((AS14B_receive_buf[6]  >= BAR_X_CENTER_POSITION) &&((AS14B_receive_buf[7]  >= BAR_Y_CENTER_POSITION))) //��һ����
+						else if((AS14B_receive_buf[6]  >= BAR_X_CENTER_POSITION) &&((AS14B_receive_buf[7]  >= BAR_Y_CENTER_POSITION))) //第一象限
 						{
-														printf("��һ���� x  = %d, y=%d\r\n", AS14B_receive_buf[6] - 50 ,AS14B_receive_buf[7]-50);
+														printf("第一象限 x  = %d, y=%d\r\n", AS14B_receive_buf[6] - 50 ,AS14B_receive_buf[7]-50);
 							as14b_post_angle = (int) (atan2(AS14B_receive_buf[6]-50 , AS14B_receive_buf[7] -50) * 180/3.1416);
 							as14b_post_length = (int)sqrt(AS14B_receive_buf[6]*AS14B_receive_buf[6] +AS14B_receive_buf[7] *AS14B_receive_buf[7]);
 						as14b_post_length = 100;
 							if(as14b_post_length > 100)
 								as14b_post_length = 100;
-							printf("��һ���� MOTO_LIGHT  pwm1  = %d, pwm2  = %d, as14b_post_angle =%d\r\n", as14b_post_length*1, abs(as14b_post_length * (sin(as14b_post_angle*3.1416/180))), as14b_post_angle);
+							printf("第一象限 MOTO_LIGHT  pwm1  = %d, pwm2  = %d, as14b_post_angle =%d\r\n", as14b_post_length*1, abs(as14b_post_length * (sin(as14b_post_angle*3.1416/180))), as14b_post_angle);
 								Moto_Direction_Turn(MOTO_LIGHT, as14b_post_length*1, abs(as14b_post_length * (sin(as14b_post_angle*3.1416/180))));
 						}
-						else 	if((AS14B_receive_buf[6]  >= BAR_X_CENTER_POSITION) &&((AS14B_receive_buf[7]  <= BAR_Y_CENTER_POSITION))) //��������
+						else 	if((AS14B_receive_buf[6]  >= BAR_X_CENTER_POSITION) &&((AS14B_receive_buf[7]  <= BAR_Y_CENTER_POSITION))) //第四象限
 						{
-								printf("�������� x  = %d, y=%d\r\n", AS14B_receive_buf[6] - 50 ,AS14B_receive_buf[7]);
+								printf("第四象限 x  = %d, y=%d\r\n", AS14B_receive_buf[6] - 50 ,AS14B_receive_buf[7]);
 					
 									as14b_post_angle = (int) (atan2(AS14B_receive_buf[6] - 50 , AS14B_receive_buf[7] ) * 180/3.1416);
 							
@@ -611,9 +612,9 @@ else{ //һֱδ���յ����ݡ�
 								as14b_post_length = 100;
 								Moto_Direction_Turn(MOTO_LIGHT,  abs(as14b_post_length * (sin(as14b_post_angle*3.1416/180))), as14b_post_length*1);
 	
-								printf("�������� MOTO_LIGHT  pwm1  = %d, pwm2  = %d, as14b_post_angle =%d\r\n", abs(as14b_post_length * (sin(as14b_post_angle*3.1416/180))),  as14b_post_length*1, as14b_post_angle);
+								printf("第四象限 MOTO_LIGHT  pwm1  = %d, pwm2  = %d, as14b_post_angle =%d\r\n", abs(as14b_post_length * (sin(as14b_post_angle*3.1416/180))),  as14b_post_length*1, as14b_post_angle);
 						}
-						else 	if((AS14B_receive_buf[6]  <= BAR_X_CENTER_POSITION) &&((AS14B_receive_buf[7]  >= BAR_Y_CENTER_POSITION))) //�ڶ�����
+						else 	if((AS14B_receive_buf[6]  <= BAR_X_CENTER_POSITION) &&((AS14B_receive_buf[7]  >= BAR_Y_CENTER_POSITION))) //第二象限
 						{
 						
 							as14b_post_angle = (int) (atan2(AS14B_receive_buf[6] , AS14B_receive_buf[7]) * 180/3.1416);
@@ -623,10 +624,10 @@ else{ //һֱδ���յ����ݡ�
 								as14b_post_length = 100;
 								Moto_Direction_Turn(MOTO_BACK, as14b_post_length*1, abs(as14b_post_length * (cos(as14b_post_angle*3.1416/180))));
 							
-							printf("�ڶ����� MOTO_BACK  pwm1  = %d, pwm2  = %d\r\n", as14b_post_length*1, abs(as14b_post_length * (cos(as14b_post_angle*3.1416/180))));
+							printf("第二象限 MOTO_BACK  pwm1  = %d, pwm2  = %d\r\n", as14b_post_length*1, abs(as14b_post_length * (cos(as14b_post_angle*3.1416/180))));
 							
 						}
-						else 	if((AS14B_receive_buf[6]  <= BAR_X_CENTER_POSITION) &&((AS14B_receive_buf[7]  <= BAR_Y_CENTER_POSITION))) //��������
+						else 	if((AS14B_receive_buf[6]  <= BAR_X_CENTER_POSITION) &&((AS14B_receive_buf[7]  <= BAR_Y_CENTER_POSITION))) //第三象限
 						{
 							as14b_post_angle = (int) (atan2(AS14B_receive_buf[6] , AS14B_receive_buf[7]) * 180/3.1416);
 							as14b_post_length = (int)sqrt(AS14B_receive_buf[6]*AS14B_receive_buf[6] +AS14B_receive_buf[7] *AS14B_receive_buf[7]);
@@ -634,7 +635,7 @@ else{ //һֱδ���յ����ݡ�
 							if(as14b_post_length > 100)
 								as14b_post_length = 100;
 								Moto_Direction_Turn(MOTO_BACK,  abs(as14b_post_length * (cos(as14b_post_angle*3.1416/180))), as14b_post_length*1 );
-									printf("�������� MOTO_BACK  pwm1  = %d, pwm2  = %d\r\n", as14b_post_length*1, abs(as14b_post_length * (cos(as14b_post_angle*3.1416/180))));
+									printf("第三象限 MOTO_BACK  pwm1  = %d, pwm2  = %d\r\n", as14b_post_length*1, abs(as14b_post_length * (cos(as14b_post_angle*3.1416/180))));
 							
 						}
 					
@@ -642,16 +643,16 @@ else{ //һֱδ���յ����ݡ�
 
 08 06 
 
-114�汾
-��OLED��ʾ�ľ�γ������ȥ����
-����ص�ѹ�����ʾ��ADC1_10 * 11 
+114版本
+将OLED显示的经纬度数据去除。
+将电池电压检测显示。ADC1_10 * 11 
 
-���Ӳ�����������ʾ������
+板子产生的热量显示出来。
 
 
-GPS��EEPROM��Ҫ���ӣ�Ȼ���һ�����ԡ����ݵ���ʱ�䳤�˺����ǻᶪʧ���ݵ���Ϣ��
+GPS的EEPROM需要焊接，然后进一步测试。数据掉电时间长了好像还是会丢失数据的信息。
 
-�޸Ŀ����ϵİ����޷�׼ȷֹͣ��ָ���жϲ�׼ȷ��ȱ������50��״̬�жϡ�
+修改控制上的按键无法准确停止。指令判断不准确，缺少两个50的状态判断。
 
 
 
@@ -660,39 +661,39 @@ GPS��EEPROM��Ҫ���ӣ�Ȼ���һ�����ԡ����ݵ���ʱ�䳤�˺����ǻᶪʧ���ݵ���Ϣ��
 
 08 06 
 
-113�汾
+113版本
 
-���������Ҫ�޸�Ϊʵʱ���ƣ����ܴ�����ʱ���������ԣ����ִ˴ε�mos����ȫ����ʵ��ʵʱ�ı�ռ�ձȼ����򣬶��Ҳ�����ַ��̵�����
-�Ѿ�������뾫���޸�Ϊʵʱ���ġ�
+电机控制需要修改为实时控制，不能存在延时。经过测试，发现此次的mos管完全可以实现实时改变占空比及方向，而且不会出现发烫的现象。
+已经将其代码精简，修改为实时更改。
 
 08 06 
 
-112�汾
-�����߿����޸�Ϊҡ���·�ʽ���ơ����Ƿֳ��ĸ����ޣ����ݽǶ���ֵ����С��ֵ�ı�ռ�ձȡ���Ҫ���ù��ɶ�����
+112版本
+将无线控制修改为摇杆新方式控制。考虑分成四个象限，根据角度数值及大小数值改变占空比。主要采用勾股定理。
 
 
 
 
 08 05
-111�汾
+111版本
 
-����led�Ŀ��ƣ����ú궨�巽ʽ��
-����mos����������400ms�ıպϣ���ֹ��������̡�����ok��
+增加led的控制，采用宏定义方式。
+增加mos驱动，采用400ms的闭合，防止电磁铁发烫。测试ok。
 
 
 08 05
-110�汾
+110版本
 
-����adc�ɼ�����Ҫ��һ������λת��������oled��ʾ��
+增加adc采集。需要进一步做单位转换处理及oled显示。
 
 
 
 08 04
-109�汾
+109版本
 
-����Ϊ�µ�PCB��
+更改为新的PCB。
 
-OLED���������ϵ��޸ġ�
+OLED作出引脚上的修改。
 
 gpio_MSCK PC0 ---> 
 gpio_MOSI PC1 ---> PC13 
@@ -710,18 +711,18 @@ gpio_CS   PD6 --->
 	#define OLED_SCLK PCout(0)
 	#define OLED_SDIN PCout(13)
 
-��ʾ��������ʾ
+显示屏正常显示
 
 
 2016 -7 31
-����ͨ��������˲��ֹͣ�����ǣ���Ҫͬʱ���ٵ�ĳ�ٶȣ�ĳ���򡣻���Ҫ�Ż���
-����gps��У׼����У׼��ʼ��ת������ֹͣ��ת��
-�յ㴦�Ĺ��䣬��Ҫ����ƫִ�Ƕȣ�������ص���ת������ת
-��������gps�޸�Ϊ1Hz�����޸�Ϊ���з�ʽ��ð�ݡ��޸���5������ð�ݵı���Ԫ���ݡ�����GPS 6��7 ��û���⡣8 ���ն�����Щ���⡣
-compass�Ķ�λ�̶�����Ҫ�Ȳ��Էֲ��Ƿ���ȣ�360�ȡ�Ȼ����һ�ξ��붨λ������Ҫд�ĵ���
+测试通过，可以瞬间停止。但是，需要同时加速到某速度，某方向。还需要优化。
+增加gps自校准程序。校准开始旋转，结束停止旋转。
+终点处的拐弯，需要根据偏执角度，进行相关的左转或者右转
+考虑增加gps修改为1Hz，并修改为队列方式求冒泡。修改了5组数据冒泡的保存元数据。测试GPS 6，7 均没问题。8 今日定星有些问题。
+compass的定位固定，需要先测试分布是否均匀，360度。然后，走一段距离定位方向。需要写文档。
 
-108�汾��
----> �ڽ���107�汾���ӵ�����Ƶ�ƽ�����ƣ�˲��ֹͣ��
+108版本，
+---> 在今日107版本增加电机控制的平滑控制，瞬间停止。
 	case MOTO_STOP:
 		TIM3->CCR3=100;
 		TIM3->CCR4=100;
@@ -729,27 +730,27 @@ compass�Ķ�λ�̶�����Ҫ�Ȳ��Էֲ��Ƿ���ȣ�360�ȡ�Ȼ����һ�ξ��붨λ������Ҫ
 //		Moto_Left_Control(Moto_T, 0);
 
 
----> ���ӣ� gps��У׼����
+---> 增加， gps自校准程序
 		
-		else if(rf_payload[6] == 6) //����
+		else if(rf_payload[6] == 6) //返航
 							{
 								if((flag_calibrate_compass++%2) == 0)
 								{
 									USART_SendData(UART4,0X00);
-									USART_SendData(UART4,0XC0); // У׼
+									USART_SendData(UART4,0XC0); // 校准
 								}
 								else
 								{
 									USART_SendData(UART4,0X00);
-									USART_SendData(UART4,0XC1); //ֹͣУ׼
+									USART_SendData(UART4,0XC1); //停止校准
 								}
 //							uCmd = USHIPBACK;
-//							setBeepBlood = BSTART;	 //��������Ҫ�޸�״̬λ
+//							setBeepBlood = BSTART;	 //报警，需要修改状态位
 							key3Cmd = 2;
 							}
 
 
---->  �յ㴦�Ĺ��䣬��Ҫ����ƫִ�Ƕȣ�������ص���ת������ת����Ҫ���ԣ�10:28��
+--->  终点处的拐弯，需要根据偏执角度，进行相关的左转或者右转。需要测试（10:28）
 
 	if(angle_normal < angle_seek)
 			{
@@ -768,131 +769,131 @@ compass�Ķ�λ�̶�����Ҫ�Ȳ��Էֲ��Ƿ���ȣ�360�ȡ�Ȼ����һ�ξ��붨λ������Ҫ
 		
 				pwm_offset = ((radian1  - radian2)/2) * pwm_p;
 				
-�����������ԣ�
-��������gps�޸�Ϊ1Hz�����޸�Ϊ���з�ʽ��ð�ݡ�queue����δ�����ɹ�����Ҫ���ԡ�
-�����飬��������
+昨日遗留测试：
+考虑增加gps修改为1Hz，并修改为队列方式求冒泡。queue。暂未锁定成功。需要测试。
+经检验，代码无误。
 		
 
 2016 -7 30
 
-���������У���ԭ��ת��Ϊ����ת�������������޸ġ�
+返航过程中，将原地转改为弧度转，并测试现象修改。
 Moto_Direction_Turn(MOTO_RIGHT, 45, 65);
 
-��������PID����ת����pid��Ҫ����������������ĿǰPΪ2 Dδ���ӡ�����Ŀǰ���ԡ�
+考虑增加PID控制转动。pid需要处理，整定参数。目前P为2 D未增加。现象目前可以。
 
-��������gps�޸�Ϊ1Hz�����޸�Ϊ���з�ʽ��ð�ݡ�queue����δ�����ɹ�����Ҫ���ԡ�
+考虑增加gps修改为1Hz，并修改为队列方式求冒泡。queue。暂未锁定成功。需要测试。
 
 2016 -7 24
 
-ң�ؿ��ƹ����У���ԭ��ת��Ϊ����ת
+遥控控制过程中，将原地转改为弧度转
 
 
 2016 -7 23
 
-�޸�beep��v����char���ţ�
+修改beep到v——char引脚，
 
-��Ҫ��beep�����޸ģ������Ʋ��ֵĴ��롣
+需要将beep引脚修改，及控制部分的代码。
 
-��ؿ���pwm������Ը���Ϊ0�����
+相关控制pwm输出可以更改为0输出。
 
 
 
 2016 07 22
-���ս��գ������쳣�޷���ȡgps����
-�£������ǳ������޸Ĵ��ˣ����ޡ�
-�£�����GPS���ݳ����쳣�����ޡ��²�������������⣬���ޡ�
-�²⣬���ӿ��ܺ��������⣬�򵥿��Ǿ���Ӧ�ò��ǡ��󻻳�������Ϊ���˿����壬�Ѿ����ˡ�
+昨日今日，出现异常无法读取gps数据
+猜，可能是程序哪修改错了，查无。
+猜，可能GPS数据出现异常，查无。猜测参数配置有问题，暂无。
+猜测，板子可能焊接有问题，简单考虑觉得应该不是。后换成昨天以为换了开发板，已经好了。
 
-5v�����λ�ã��ڷ����������ʱ�򣬻�����쳣gps���ǡ�
+5v供电的位置，在蜂鸣器输出的时候，会出现异常gps丢星。
 
-��ģ��󣬷�����Ȼ����ֶ��ǣ���������úܶࡣ�����ǵ�ص�ѹ���㣬��ʱ���ֵĵ�ѹ��10.������
+换模块后，发现依然会出现丢星，但是现象好很多。可能是电池电压不足，此时出现的电压是10.几伏。
 
 
 
 2016 6 4
 
-�޸��
+修改项：
 
-�����Ƕȣ��޸�Ϊ3��
+将差别角度，修改为3度
 	if(((abs(angle_normal  - (Angle - 90)) < 3) ||((abs(abs(angle_normal - (Angle - 90) ) - 360) < 3))))
 	
-�޸�����270��-300�����ҷ�Χ��ʱ����޷�����ת��״̬
+修复当在270度-300度左右范围内时候的无法正反转的状态
 	
 		if((Angle - 90) < 0)
 		angle_2_oled = Angle + 360;
 		OLED_ShowNum(92,36,(u32)(angle_2_oled - 90),6,12);
 
 
-			angle_seek = Angle + 360;���Ƕ�С��0��ʱ����Ҫ����һ��360�ȡ�
+			angle_seek = Angle + 360;当角度小于0的时候，需要加上一个360度。
 
 
-�޸���λ�����ļ��㷽�����Ҹ�����Ϊ���Ƕȼ���Ӧ����Ŀǰλ�õ����������Ϊ׼�������λ�ã�ҲӦ����ˡ�
-
-
-
+修复定位返航的计算方法，我个人以为，角度计算应该以目前位置到返航点计算为准。距离的位置，也应该如此。
 
 
 
 
-��������͵�ѹ
 
 
 
-������ϵ�Դ���ѹѸ�ٱ���������ʲôԭ��?
-
-������к��Դ��ѹѸ�ٱ������˿���ԭ���У�
-��Դ������С��ɵ�ѹ������
-��Դ�߹�С��ɵ�ѹ������
-����������Դ�ߡ���Դ������ƥ����ɡ�
-������ߴ�����ɡ�
-��������ࡢ����ػ��Ѽ��ж�·����
-������ع��صȵ���ɡ�
-
-
-1�������·��2����Դ���ʲ�����3�������·�Ӵ�������
-
-���Ŀ������12V��Դ��������
-
-��Ҫ��pcb�塣pcb�����ӵػ���ɵ�ѹ���͡�������һ���ɵ��ڵ�Դ���ڵ���ϣ����ж��Ƿ��ǵ�Դ���⻹�ǵ�����⡣���Ų顣
-
-������𶯵��������е�����N��
-
-
-�綯��������ʱ���������Դﵽ�������3-7�������͵ĵ�������͸����ˣ�
-������·�������е���ģ���ô��ĵ���ͨ����·���ͻ�����·�ϲ���һ����ѹ�������Ե���ϵĵ�ѹ�ͱ������ˡ���˴��͵ĵ��Ҫ���ý�ѹ������
-
-�������ĵ�Դ�������·û���⣬�������Ϊ��Դ�Ĵ������������������µ�Դ��ѹ���������ˡ�
-����Կ��ǻ�һ��������ʴ�ĵ�Դ���ԡ�
-
-���������Ҳ�������������ˣ���������ˣ��ǵ�Դ��������������Ҫ����ѹ����Ҫ�п���Դ����������������
+电机被拉低电压
 
 
 
-�������ݣ�
-��һ�飺
+电机接上电源后电压迅速被拉低了是什么原因?
+
+电机运行后电源电压迅速被拉低了可能原因有：
+电源容量过小造成电压降过大。
+电源线过小造成电压降过大。
+电机功率与电源线、电源容量不匹配造成。
+电机接线错误造成。
+电机相与相、相与地或匝间有短路现象。
+电机负载过重等等造成。
+
+
+1、电机短路，2、电源功率不够，3、供电电路接触不良。
+
+最大的可能你的12V电源出现问题
+
+主要看pcb板。pcb焊锡接地会造成电压拉低。可以用一个可调节电源加在电机上，可判断是否是电源问题还是电机问题。逐步排查。
+
+电机的起动电流是运行电流的N倍
+
+
+电动机在启动时，电流可以达到额定电流的3-7倍，大型的电机电流就更大了，
+而且线路本身是有电阻的，这么大的电流通过线路，就会在线路上产生一个电压降，所以电机上的电压就被拉低了。因此大型的电机要采用降压启动。
+
+检查下你的电源，如果电路没问题，多半是因为电源的带负载能力不够，导致电源电压被拉下来了。
+你可以考虑换一个输出功率大的电源试试。
+
+最近搞电机，也遇到你这问题了，后来解决了，是电源电流不够。不光要看电压，还要有看电源最大输出电流够不够
+
+
+
+测试数据：
+第一组：
 new_dimensionality = 31.01614210;
 new_longitude = 121.35121919;
 old_dimensionality = 31.01612999;
 old_longitude = 121.35142949;
-2��
+2：
 new_dimensionality = 31.01622150;
 new_longitude = 121.35143770;
 old_dimensionality = 31.01601209;
 old_longitude = 121.35151149;
-�Ƕ����3�ȣ�ʵ��343.117780��
+角度误差3度，实际343.117780！
 
-3��
+3：
 new_dimensionality =31.01601279 ;
 new_longitude = 121.35152169;
 old_dimensionality = 31.01559400;
 old_longitude = 121.35153790;
-ʵ�ʣ�358.090649��1�����
-4��
+实际：358.090649，1度误差
+4：
 new_dimensionality = 31.01607500;
 new_longitude = 121.3531360;
 old_dimensionality = 31.01652540;
 old_longitude = 121.3530769;
-ʵ�ʣ�173.552256��1�����
+实际：173.552256，1度误差
 
 
 
