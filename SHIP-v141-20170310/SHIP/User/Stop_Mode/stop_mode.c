@@ -278,7 +278,7 @@ void Enter_Stop_Status_GPIO_Init_All_Same(void) // 23uA
 		SD_STOP_Mode();
 		
 		// 电机部分进入stop模式
-		Mos_Moto_STOP_Mode();	
+//		Mos_Moto_STOP_Mode();	
 		
 		// iic 部分
 		IIC_STOP_Mode();
@@ -327,7 +327,7 @@ void Test_Sys_And_Wake_up(void)
 	// 晶振 改为普通IO
 		Osc_32_Remap();
 	
-		Mos_Moto_STOP_Mode();
+//		Mos_Moto_STOP_Mode();
 
 		Others_STOP_Mode();	
 	

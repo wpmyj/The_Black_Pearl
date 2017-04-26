@@ -116,13 +116,24 @@ void TIM5_IRQHandler(void)
 }
 #endif
 
-void TIM4_IRQHandler(void)
-{
-    if ( TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET )
-    {
-        flag_4ms_set++;
-        TIM_ClearITPendingBit(TIM4, TIM_FLAG_Update);
-    }
+//void TIM4_IRQHandler(void)
+//{
+//    if ( TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET )
+//    {
+//        flag_4ms_set++;
+//        TIM_ClearITPendingBit(TIM4, TIM_FLAG_Update);
+//    }
+//}
+
+
+
+void TIM1_UP_IRQHandler(void)
+{	
+	if ( TIM_GetITStatus(TIM1 , TIM_IT_Update) != RESET ) 
+	{	
+		flag_4ms_set++;
+		TIM_ClearITPendingBit(TIM1 , TIM_FLAG_Update);  
+	}
 }
 
 // 地址       类型  命令  长度  同步  电量  gps   结束      结束后缀

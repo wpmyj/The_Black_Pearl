@@ -127,6 +127,10 @@ int main(void)
 //	for(i = 0; i < sizeof(secret_out)/sizeof(unsigned short int); i++)
 //		printf("\r\n secret_out[%d] = %d\r\n", i, secret_out[i]);
 
+
+        LED1_OFF;
+				
+				
     while(1)
     {
         while(SD_Initialize())  //¼ì²â²»µ½SD¿¨
@@ -134,17 +138,16 @@ int main(void)
             printf("\r\n SD Card Error!");
             printf("\r\n Please Check !");
 
-            Delay(0X0ffff);
-            LED1_TOGGLE;
+      //      Delay(0X0ffff);
+      //      LED1_TOGGLE;
 
             k++;
-            if(k > 10)
+            if(k > 5)
                 goto exit_fail;
         }
 
-        LED1_OFF;
-        LED1_ON;
-        Delay(0X0fffff);
+
+
 
 
 
@@ -204,22 +207,30 @@ f_open_again:
 
         LED1_ON;
 
-        while(1);
+        while(1)
+        {
+						LED1_OFF;
+            Delay(0X6fffff);
+            LED1_ON;
+            Delay(0X6fffff);
+        }
 exit_fail:
-				
-				LED1_OFF;
+
+
+        LED1_ON;
+        Delay(0Xfffff);
+        LED1_OFF;
 				Delay(0Xfffff);
-				LED1_ON;
-				Delay(0Xfffff);
-				LED1_OFF;
-				Delay(0Xfffff);
-				LED1_ON;
-				Delay(0Xfffff);
-				LED1_OFF;
+
 
         printf("\r\n iap_load_app ! update fail \r\n");
         iap_load_app(FLASH_APP_ADDR);
-        while(1);
+        while(1) {
+            LED1_OFF;
+            Delay(0X6fffff);
+            LED1_ON;
+            Delay(0X6fffff);
+        }
     }
 }
 

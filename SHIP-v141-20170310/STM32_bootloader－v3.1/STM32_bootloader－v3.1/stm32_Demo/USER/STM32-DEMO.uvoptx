@@ -176,20 +176,43 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>79</LineNumber>
+          <LineNumber>205</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134219922</Address>
+          <Address>134218580</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>\\vmware-host\Shared Folders\vmware-host\Shared Folders\鏂囩 2\project\The_Black_Pearl\The_Black_Pearl\SHIP-v141-20170310\STM32_bootloader锛峷3.1\STM32_bootloader锛峷3.1\stm32_Demo\secret\secret.c</Filename>
+          <Filename>C:\Users\Aisen\Desktop\SHIP-v141-20170310\STM32_bootloader锛峷3.1\STM32_bootloader锛峷3.1\stm32_Demo\USER\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\STM32_DEMO\../secret/secret.c\79</Expression>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>230</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134218710</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>C:\Users\Aisen\Desktop\SHIP-v141-20170310\STM32_bootloader锛峷3.1\STM32_bootloader锛峷3.1\stm32_Demo\USER\main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\STM32_DEMO\main.c\230</Expression>
         </Bp>
       </Breakpoint>
+      <WatchWindow1>
+        <Ww>
+          <count>0</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>iap_debug</ItemText>
+        </Ww>
+      </WatchWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -226,7 +249,7 @@
 
   <Group>
     <GroupName>STARTCODE</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -333,7 +356,7 @@
 
   <Group>
     <GroupName>CMSIS</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -563,7 +586,7 @@
 
   <Group>
     <GroupName>IAP</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

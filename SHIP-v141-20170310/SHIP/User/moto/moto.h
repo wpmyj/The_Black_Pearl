@@ -22,6 +22,10 @@
 
 
 
+
+
+
+
 #define ONE_STEP 0
 #define TWO_STEP 38
 #define THREE_STEP 71
@@ -67,6 +71,25 @@ enum MOTO_TYPE
 
 
 
+
+#define Clockwise_Rotation 100											//正转
+#define Counter_Clockwise_Rotation 0							//反转
+
+
+#define RIGHT_DIREXTION  TIM3->CCR4
+#define LEFT_DIREXTION   TIM3->CCR3
+
+
+
+#define RIGHT_IN1					TIM3->CCR1
+#define RIGHT_IN2					TIM3->CCR2
+
+
+#define LEFT_IN1					TIM4->CCR3
+#define LEFT_IN2					TIM4->CCR4
+
+
+
 typedef struct
 {
     u8 Moto_Right_Control_last_cmd;
@@ -96,16 +119,17 @@ void Mos_Moto_Init(void);
 void Mos_Moto_Test(void);
 void Moto_Direction_Turn( int control, int pwm, int pwm_pro);
 
-void Mos_Moto_STOP_Mode(void);
+//void Mos_Moto_STOP_Mode(void);
+
+void NEW_MOTO_ALL_STOP_RIGHT_NOW(void);
 
 
-void Moto_Direction_Moto_Z_100_pwm(void);
-
-void Moto_Direction_Moto_F_100_pwm(void);
-void Moto_Direction_0_pwm(void);
+void Moto_Direction_Moto_Change_One_Time(void);
 
 
 void Moto_Chang_Control_Roll(void);
+
+void MOTO_TEST_CHANGE(void);
 
 
 

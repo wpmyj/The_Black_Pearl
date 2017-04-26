@@ -15,13 +15,14 @@
 
 int main(void)
 {
-
+//   int temp_number = 0;
     Ship_ALL_Init(); //需要增加led的程序
 	
 #ifdef WWDOG
     WWDG_Config(0X7F, 0X5F, WWDG_Prescaler_8); 					// 窗口看门狗 初始化
 #endif
 			
+	
     while(1)
     {
         Board_Data_Refresh(); 				 									// 平台无关，将Ship_Board_Data结构体填充好。

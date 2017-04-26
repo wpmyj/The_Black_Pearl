@@ -91,4 +91,54 @@ void TIM4_Configuration(void)
     
     //RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , DISABLE);		/*先关闭等待使用*/    
 }
+
+
+void TIMx_NVIC_Configuration(void)
+{
+    NVIC_InitTypeDef NVIC_InitStructure; 
+    
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);  													
+    NVIC_InitStructure.NVIC_IRQChannel = macTIM_IRQ;	  
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 4;	
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+}
+
+void TIM1_Configuration(void)
+{
+    TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+		
+		TIM_DeInit(TIM1);   
+		/* 设置TIM2CLK 为 72MHZ */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1 , ENABLE);
+    //TIM_DeInit(TIM2);
+		
+	/* 自动重装载寄存器周期的值(计数值) */
+    TIM_TimeBaseStructure.TIM_Period=5000; // 5000
+	
+    /* 累计 TIM_Period个频率后产生一个更新或者中断 */
+	  /* 时钟预分频数为72 */
+    TIM_TimeBaseStructure.TIM_Prescaler= 72-1; // 72 -1
+		/* 对外部时钟进行采样的时钟分频,这里没有用到 */
+    TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;
+	
+    TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; 
+		TIM_TimeBaseStructure.TIM_RepetitionCounter = 0; //高级定时器需要加上这个，否则会不准确，甚至相差很大
+    TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+	
+    TIM_ClearFlag(TIM1, TIM_FLAG_Update);
+	
+	
+		TIMx_NVIC_Configuration();
+	
+	
+    TIM_ITConfig(TIM1,TIM_IT_Update,ENABLE);
+		
+    TIM_Cmd(TIM1, ENABLE);									
+  //  RCC_APB2PeriphClockCmd (RCC_APB2Periph_TIM1, DISABLE);
+}
+
+
+
 /******************* (C) COPYRIGHT 2012 WildFire Team *****END OF FILE************/

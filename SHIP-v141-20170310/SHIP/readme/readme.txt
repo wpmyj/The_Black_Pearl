@@ -1,14 +1,201 @@
 
 
+/******************************************		new verion		************************************************/
+
+version 142 
+(data:2017/04/22 ~ 2017/04/26)
+
+1st	:	调速问题，电机的mos会出问题，发烫严重。
+		改变控制方式，结合需修改的原理图，测试通过 （0426）。
+
+2nd	:	遥控器异常现象：关机后，地址丢失，还需要在再次配网。vb地址和vc有差距，最新固件没问题。
+
+3rd	:	配对，有时候无法成功。 
+		出现现象1：在慈溪，若无法配对成功，长按退出配对，但是再次进入，则成功。原因需要找到。自行测试，发现10次均成功。
+		
+		在更新固件后，再次配置，无法配对较为频繁。
+		现象为：升级过程中，遥控器正常开机状态，进行升级，升级后立即执行配对极容易失败。且，再次重启船也不能配对成功。长按退出配对，但是再次进入，则基本都成功。
+		经过对比测试发现：升级过程中，关闭遥控器，升级后打开遥控器，进入配对，打开船，也没问题。
+
+
+
+4th ：	地磁问题,电源干扰，查看。用购买模块测试，正常，排除stm32代码的问题。锁定在stm8的hmc1022模块上。重新烧录程序，正常。出厂前，测试hmc1022的性能，具体做法查看说明书。
+
+5th	: 	sd卡升级问题，出现现象，在stlink的3.3v下，能够完成正常。在船上偶尔不正常，初步判断为电压稳定性。
+		另增加提示，若是sd卡未检测到，led2闪烁两次，若是跳转到app，则led1 led2交替闪烁一下。
+		如有问题，暂先考虑硬件问题。
+
+6th	:	导致异常，还有原因：一个版本启动程序差异，就是hd.s和md.s,进行更改了。回退版本处理。
+	
+
+
+
+
+
+void ALL_Board_Init(void)
+{
+
+    SysTick_Init();
+
+    TIM3_Init();
+    TIM4_PWM_Init();
+
+}
+
+
+
+
+
+    ALL_Board_Init();
+
+// ------------------------------------------------------------------------------ 1->2
+
+
+
+    /*
+
+    1 	5s完成一次0上升到100的过程，每次占空比改变10（500ms一次）。5s完成一次100下降到0的过程，每次占空比改变10（500ms一次）。
+
+    频率 10KHZ
+    IN1为100，IN2改变。
+    测试五分钟，暂时不发烫。基本没温度。
+
+
+    2 	修改时间为500ms一个周期，50ms改变一个10个占空比。
+    	测试五分钟，暂时不发烫。基本没温度。
+
+
+    3 	IN1为0，IN2改变，暂时不发烫。基本没温度。
+
+    按照理论来讲，100的占空比，也没问题
+
+
+    4		高低高低频繁正反转。测试五分钟，暂时不发烫。基本没温度。
+
+
+
+
+    5 修改时间为100ms一个周。 期1ms改变一个10个占空比。
+    	频繁正反转。测试五分钟，暂时不发烫。基本没温度。
+
+
+		6 新的板子，进行测试，反复，正反转，50分钟，1s完成一次反转过程，暂无异常。
+
+    */
+
+
+//	/*		满速度反转				*/
+//
+//				TIM3->CCR3= TIM3->CCR4 = 100;
+//
+//				TIM3->CCR1 =  100;
+//				TIM4->CCR3 = 100;
+//
+//						TIM3->CCR2 =  0;
+//				TIM4->CCR4  = 0;
+//
+//
+////	while(1);
+//
+//
+//	/*		满速度正转				*/
+//				TIM3->CCR3= TIM3->CCR4 = 0;
+//
+//				TIM3->CCR1 =  0;
+//				TIM4->CCR3 = 0;
+//
+//				TIM3->CCR2 =  100;
+//				TIM4->CCR4 = 100;
+
+
+    while(1)
+    {
+
+
+
+        if(flag_time2_irq % 100 == 0)
+        {
+
+            if((TIM3->CCR3 == 100)&&(TIM3->CCR4 == 100))
+            {
+                TIM3->CCR2 =  flag_time2_irq / 10;
+                TIM4->CCR4  = flag_time2_irq / 10;
+            }
+            else
+            {
+                TIM3->CCR1 = flag_time2_irq / 10;
+                TIM4->CCR3 = flag_time2_irq / 10;
+            }
+
+
+            if(flag_time2_irq == 1000)
+            {
+                flag_direction_irq = 0;
+
+        //        flag_chang_dircetion = !flag_chang_dircetion;
+
+                if(flag_chang_dircetion == 1)
+                {
+                    flag_chang_dircetion = 0;
+//				GPIO_ResetBits(GPIOC, GPIO_Pin_8);
+//				GPIO_ResetBits(GPIOC, GPIO_Pin_9);
+                    TIM3->CCR3= TIM3->CCR4 = 100;
+
+                    TIM3->CCR2 =  100;
+                    TIM4->CCR4  = 100;
+
+                    TIM3->CCR1 = 100;
+                    TIM4->CCR3 = 100;
+
+                } else {
+
+                    flag_chang_dircetion = 1;
+                    TIM3->CCR3= TIM3->CCR4 =0;
+
+
+                    TIM3->CCR2 =  100;
+                    TIM4->CCR4  = 100;
+
+                    TIM3->CCR1 = 100;
+                    TIM4->CCR3 = 100;
+
+//				GPIO_SetBits(GPIOC, GPIO_Pin_8);
+//				GPIO_SetBits(GPIOC, GPIO_Pin_9);
+									
+                }
+            }
+
+            if(flag_time2_irq == 0)
+            {
+                flag_direction_irq = 1;
+            }
+
+        }
+
+        Delay_ms(5); // 50  5
+        if(flag_direction_irq)
+            flag_time2_irq++;
+        else
+            flag_time2_irq--;
+        //		printf("\r\n this is a usart printf demo \r\n");
+        //	while(flag_time2_irq == 0);
+
+
+    }
+}
+
+
+
+
 
 
 
 /******************************************		new verion		************************************************/
 
 version 142 
-(data:2017/04/22)
+(data:2017/04/22 ~ 2017/04/24)
 
-1st	:	调速问题，电机会出问题。修改占空比。 
+1st	:	调速问题，电机的mos会出问题，发烫严重。改变控制方式，结合需修改的原理图，测试通过。
 
 2nd	:	遥控器，关机后，地址丢失，还需要在再次配网。vb地址和vc有差距，最新固件没问题。
 
@@ -16,29 +203,55 @@ version 142
 
 4th ：	地磁问题,电源干扰，查看。用购买模块测试，正常，排除stm32代码的问题。锁定在stm8的hmc1022模块上。重新烧录程序，正常。
 
-5th	: 	sd卡升级问题，出现现象，在stlink的3.3v下，能够完成正常。在船上偶尔不正常，初步判断为电压稳定性。另增加提示，若是sd卡未检测到，led2闪烁三次，若是跳转到app，则led1 led2交替闪烁一下。
+5th	: 	sd卡升级问题，出现现象，在stlink的3.3v下，能够完成正常。在船上偶尔不正常，初步判断为电压稳定性。
+		另增加提示，若是sd卡未检测到，led2闪烁三次，若是跳转到app，则led1 led2交替闪烁一下。
+		如有问题，暂先考虑硬件问题。
+	
+6th	:	导致异常，还有原因：一个版本启动程序差异，就是hd.s和md.s,进行更改了。回退版本处理。
+	
 
 
 
+资源说明：
 
-/******************************************		new verion		************************************************/
+定时器：
 
+系统滴答定时器：
 
-version 141 
-(data:2017/04/14)
-
-1st	:	more brief explanatory note. 
-
-2nd	:	all style.
-
-3rd	:	add text in readme.txt for more information
+tim1	null --->修改为定时器 ok 0424
+tim2  beep
+TIM4 1ms定时器，即将更改pwm输出
+tim3 mos驱动 pwm输出
 
 
 
+串口通讯：
+
+USART1	compass
+usart2  gps									DMA channel 6
+USART3	蓝牙接收
+
+UART4	log信息（宏定义，stm32vc以上才可以）
 
 
+adc											DMA channel 1
 
-/******************************************		new verion		************************************************/
+ADC_ConvertedValueLocal[0] 	电池电压
+
+ADC_ConvertedValueLocal[1]	电流1 
+ADC_ConvertedValueLocal[2] 	电流2
+
+ADC_ConvertedValueLocal[3] 	温度
+
+
+看门狗：
+
+ WWDG_Config(0X7F, 0X5F, WWDG_Prescaler_8); 					// 窗口看门狗
+ 
+ 
+ 
+ 
+
 
 version 141 
 (data:2017/04/14)
